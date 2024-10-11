@@ -1,9 +1,14 @@
+
 // controllers/authController.js
 
 const User = require('../models/userModel');
+const twilio = require('twilio');
 
-// Generate OTP helper function
-const generateOTP = () => Math.floor(1000 + Math.random() * 9000).toString();
+// Twilio configuration
+const accountSid = 'AC0a8e940a64f34356ad286610ab428a7a';
+const authToken = '1b3402266036ce109624fa0196be3653';
+const client = new twilio(accountSid, authToken);
+const twilioServiceSid = 'VAf7c33a2f0e116adbf7da7309e36fd8b7 ';
 
 // Registration Handler
 const registerUser = async (req, res) => {
@@ -39,15 +44,18 @@ const loginUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const otp = generateOTP();
-        const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000); // OTP valid for 5 minutes
-
-        user.otp = otp;
-        user.otpExpiresAt = otpExpiresAt;
-        await user.save();
-
-        console.log(`OTP sent to ${mobileNumber}: ${otp}`);
-        res.status(200).json({ message: 'OTP sent successfully' });
+        // Send OTP via Twilio Verify API
+        await client.verify.services(twilioServiceSid)
+            .verifications
+            .create({ to: mobileNumber, channel: 'sms' })
+            .then(verification => {
+                console.log(`OTP sent to ${mobileNumber}: ${verification.sid}`);
+                res.status(200).json({ message: 'OTP sent successfully' });
+            })
+            .catch(error => {
+                console.error(error);
+                res.status(500).json({ message: 'Failed to send OTP' });
+            });
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error', error });
     }
@@ -63,11 +71,21 @@ const verifyOTP = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        if (user.otp === otp && user.otpExpiresAt > new Date()) {
-            res.status(200).json({ message: 'Login successful' });
-        } else {
-            res.status(400).json({ message: 'Invalid or expired OTP' });
-        }
+        // Verify OTP via Twilio Verify API
+        await client.verify.services(twilioServiceSid)
+            .verificationChecks
+            .create({ to: mobileNumber, code: otp })
+            .then(verification_check => {
+                if (verification_check.status === 'approved') {
+                    res.status(200).json({ message: 'Login successful' });
+                } else {
+                    res.status(400).json({ message: 'Invalid or expired OTP' });
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                res.status(500).json({ message: 'Failed to verify OTP' });
+            });
     } catch (error) {
         res.status(500).json({ message: 'Internal Server Error', error });
     }
