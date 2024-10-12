@@ -1,0 +1,45 @@
+/* App.css */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  perspective: 1000px; /* Adds perspective for 3D effect */
+  background: linear-gradient(135deg, #ff7e5f, #feb47b); /* Vibrant gradient background */
+}
+
+/* Optional: Adding a subtle texture overlay */
+#app-background {
+  background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png'); /* Add your own texture here */
+  opacity: 0.1; /* Adjust opacity for a subtle effect */
+}
+
+.form-container {
+  transition: transform 0.2s; /* Smooth transition for scaling */
+}
+
+/* Additional styles for input and button hover effects */
+input:focus {
+  border-color: #ff7e5f; /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(255, 126, 95, 0.5);
+}
+
+button:hover {
+  transform: scale(1.05); /* Slightly enlarge buttons on hover */
+}
+@keyframes highlight {
+  0% {
+      background-color: transparent;
+  }
+  50% {
+      background-color: rgba(255, 255, 0, 0.6); /* Yellow highlight */
+  }
+  100% {
+      background-color: transparent;
+  }
+}
+
+.message-highlight {
+  animation: highlight 5s ease-in-out; /* Duration and easing */
+  padding: 10px; /* Optional padding for better visibility */
+  border-radius: 5px; /* Optional rounded corners */
+}
