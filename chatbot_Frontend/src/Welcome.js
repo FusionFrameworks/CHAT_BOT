@@ -1,23 +1,25 @@
 // Welcome.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 
 const Welcome = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     return (
-        <div className="welcome-container min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-blue-500">
-            <h1 className="text-4xl font-bold text-white mb-8">Welcome to CareLink!</h1>
-            <div className="flex space-x-4">
+        <div className="welcome-container min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-blue-500 px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-10 animate-bounce-3d text-center">
+                Welcome to <span className="text-shadow-lg">CareLink</span>!
+            </h1>
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
                 <button
-                    onClick={() => navigate('/labtest')} // Navigate to Lab Test page
-                    className="px-4 py-2 bg-white text-blue-500 font-semibold rounded-lg shadow-md hover:bg-blue-100 transition duration-200"
+                    onClick={() => navigate('/labtest')}
+                    className="w-full sm:w-auto px-6 py-3 bg-white text-blue-500 font-semibold rounded-lg shadow-3d transition transform hover:scale-105 hover:bg-blue-100"
                 >
                     Lab Test
                 </button>
                 <button
-                    onClick={() => navigate('/chatbot')} // Navigate to Chatbot page
-                    className="px-4 py-2 bg-white text-blue-500 font-semibold rounded-lg shadow-md hover:bg-blue-100 transition duration-200"
+                    onClick={() => navigate('/chatbot')}
+                    className="w-full sm:w-auto px-6 py-3 bg-white text-blue-500 font-semibold rounded-lg shadow-3d transition transform hover:scale-105 hover:bg-blue-100"
                 >
                     Chatbot
                 </button>

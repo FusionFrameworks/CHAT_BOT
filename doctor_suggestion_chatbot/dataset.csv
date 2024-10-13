@@ -1,0 +1,68 @@
+Symptoms,Specialization,Doctor
+"High temperature, chills, sweating, headache",General Physician,Dr. Arjun Sharma
+"Fever, cough, sore throat, runny nose",General Physician,Dr. Priya Verma
+"Sore throat, runny nose, coughing, sneezing",General Physician,Dr. Amit Gupta
+"Dull pain, pressure in the head, sensitivity to light",Neurologist,Dr. Suresh Rao
+"Abdominal pain, bloating, nausea, vomiting",Gastroenterologist,Dr. Nisha Patel
+"Sneezing, itchy eyes, runny nose, rash",Allergist,Dr. Rohan Mehta
+"Increased thirst, frequent urination, fatigue",Endocrinologist,Dr. Kavita Joshi
+"Headaches, shortness of breath, nosebleeds",Cardiologist,Dr. Vikram Singh
+"Wheezing, coughing, chest tightness, shortness of breath",Pulmonologist,Dr. Sneha Iyer
+"Joint pain, swelling, stiffness",Rheumatologist,Dr. Rahul Nair
+"Severe headache, nausea, sensitivity to light",Neurologist,Dr. Anjali Choudhary
+"Cough, fever, difficulty breathing",Pulmonologist,Dr. Sanjay Reddy
+"Cough, production of mucus, fatigue",Pulmonologist,Dr. Meera Bhattacharya
+"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Gaurav Kapoor
+"Severe pain in the side, blood in urine, nausea",Urologist,Dr. Ramesh Iyer
+"Fatigue, weakness, pale skin",Hematologist,Dr. Neelam Sethi
+"Heartburn, regurgitation, difficulty swallowing",Gastroenterologist,Dr. Amar Thakur
+"Fatigue, weight changes, sensitivity to temperature",Endocrinologist,Dr. Sheetal Deshmukh
+"Intense joint pain, swelling, redness",Rheumatologist,Dr. Vinay Patil
+"Redness, swelling, warmth, pus",Dermatologist,Dr. Pooja Jain
+"Nasal congestion, facial pain, headache",Otolaryngologist,Dr. Arvind Kumar
+"Persistent fatigue, sleep disturbances",Psychiatrist,Dr. Nitin Desai
+"Sadness, loss of interest, fatigue",Psychiatrist,Dr. Rhea Malhotra
+"Restlessness, rapid heartbeat, excessive worry",Psychologist,Dr. Tanuja Shetty
+"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Raghav Gupta
+"Bone fractures, back pain, loss of height",Endocrinologist,Dr. Suman Kaur
+"Abdominal pain, bloating, diarrhea, constipation",Gastroenterologist,Dr. Akash Menon
+"Abdominal pain, nausea, vomiting",Surgeon,Dr. Deepak Sinha
+"Bulge in the abdomen, pain, discomfort",Surgeon,Dr. Sonali Chawla
+"Jaundice, abdominal pain, swelling",Hepatologist,Dr. Kunal Shah
+"Sudden pain in the abdomen, nausea, vomiting",Gastroenterologist,Dr. Arti Verma
+"Diarrhea, bloating, fatigue",Dietitian,Dr. Preeti Joshi
+"Itchy skin, redness, dryness",Dermatologist,Dr. Rajesh Kumar
+"Red patches, dry skin, itching",Dermatologist,Dr. Priyanka Agarwal
+"Redness, swelling, itching",Dermatologist,Dr. Sanjay Bhatia
+"Nausea, vomiting, diarrhea",Infectious Disease Specialist,Dr. Aarti Gupta
+"Rapid heartbeat, sweating, trembling",Psychiatrist,Dr. Karan Mehta
+"Recurrent intrusive thoughts, anxiety",Psychologist,Dr. Anjali Dutta
+"Re-experiencing trauma, hyperarousal",Psychiatrist,Dr. Shalini Kapoor
+"Loud snoring, gasping for air, daytime fatigue",Gynecologist,Dr. Meera Malhotra
+"Irregular periods, hormonal imbalances",Gynecologist,Dr. Kavita Bhardwaj
+"Pelvic pain, fever, unusual discharge",Gynecologist,Dr. Neha Verma
+"Painful urination, frequent urge to urinate",Urologist,Dr. Rakesh Joshi
+"Hot flashes, mood swings, irregular periods",Gynecologist,Dr. Ritu Singh
+"Loss of libido, erectile dysfunction",Psychiatrist,Dr. Arvind Kumar
+"Irregular periods, hormonal imbalances",Pediatrician,Dr. Nikhil Bansal
+"Developmental delays, behavioral issues",Pediatrician,Dr. Sakshi Sharma
+"Memory loss, confusion, mood changes",Geriatrician,Dr. Ravi Desai
+"Cough, sore throat, difficulty breathing",Infectious Disease Specialist,Dr. Anand Iyer
+"Fever, cough, difficulty breathing, loss of taste/smell",Pediatrician,Dr. Vinod Agarwal
+"Itchy rash, fever, fatigue",Pediatrician,Dr. Jyoti Rani
+"High fever, cough, runny nose, red spots",Pediatrician,Dr. Prakash Verma
+"Swollen salivary glands, fever, headache",Pediatrician,Dr. Mohit Singh
+"Fever, sore throat, red rash",Pediatrician,Dr. Priti Joshi
+"Cough, weight loss, night sweats",Infectious Disease Specialist,Dr. Sanjeev Bansal
+"Flu-like symptoms, fever, fatigue",Infectious Disease Specialist,Dr. Rohan Gupta
+"Fatigue, jaundice, abdominal pain",Infectious Disease Specialist,Dr. Tarun Nair
+"Sore throat, difficulty swallowing, fever",Pediatrician,Dr. Aastha Bansal
+"Coughing, wheezing, difficulty breathing",Pediatrician,Dr. Ritika Kapoor
+"Pimples, blackheads, oily skin",Dermatologist,Dr. Vineet Sharma
+"Thinning hair, bald patches",Dermatologist,Dr. Arjun Soni
+"Itchy skin, redness, swelling",Infectious Disease Specialist,Dr. Rina Iyer
+"Fever, chills, fatigue",Infectious Disease Specialist,Dr. Saurabh Kumar
+"Fever, fatigue, body aches",Infectious Disease Specialist,Dr. Kavita Mehta
+"Abdominal pain, diarrhea",Pediatrician,Dr. Parul Gupta
+"Fatigue, weakness, brittle nails",Nutritionist,Dr. Shreya Nair
+"Weight gain, difficulty losing weight",Nutritionist,Dr. Nidhi Agarwal
