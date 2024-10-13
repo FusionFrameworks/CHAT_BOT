@@ -124,17 +124,16 @@
 
 
 
-
 const User = require('../models/userModel');
 const twilio = require('twilio');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 
-dotenv.config();
+// Twilio configuration - directly hardcoded values
+const client = new twilio('AC0a8e940a64f34356ad286610ab428a7a', 'ebd0cef9ce64fb4c45afd4d38a918be6');
+const twilioServiceSid = 'VAf7c33a2f0e116adbf7da7309e36fd8b7';
 
-// Twilio configuration
-const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-const twilioServiceSid = process.env.TWILIO_SERVICE_SID;
+// JWT secret key
+const jwtSecret = 'YOUR_JWT_SECRET_KEY';
 
 // Array of Twilio numbers
 const twilioNumbers = [
@@ -214,7 +213,7 @@ const verifyOTP = async (req, res) => {
             .then(verification_check => {
                 if (verification_check.status === 'approved') {
                     console.log(`OTP verified for ${mobileNumber}`);
-                    const token = jwt.sign({ mobileNumber }, process.env.JWT_SECRET, { expiresIn: '1h' });
+                    const token = jwt.sign({ mobileNumber }, jwtSecret, { expiresIn: '1h' });
                     res.status(200).json({ message: 'Login successful', token });
                 } else {
                     console.log(`Failed OTP verification for ${mobileNumber}`);
