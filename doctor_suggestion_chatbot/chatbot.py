@@ -1,11 +1,10 @@
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pandas as pd
 import re
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+CORS(app)  # Enable CORS for cross-origin requests
 
 # Load the dataset
 def load_dataset():
@@ -63,6 +62,11 @@ def suggest_doctor(df, user_symptoms):
 
     # If no match is found
     return "🤔 No suitable doctors found. Please provide more symptoms or check with a general physician."
+
+# Root route to indicate the API is running
+@app.route('/')
+def home():
+    return "Doctor Suggestion Chatbot API is running!"
 
 # API endpoint to handle doctor suggestions
 @app.route('/suggest_doctor', methods=['POST'])

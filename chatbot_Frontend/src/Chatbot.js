@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 
 const Chatbot = () => {
@@ -7,11 +6,9 @@ const Chatbot = () => {
     const chatboxRef = useRef();
 
     useEffect(() => {
-        // Welcoming message
         const welcomeMessage = "👋 Welcome to the Health Chatbot! How can I assist you today?";
         setResponses([welcomeMessage]);
 
-        // Auto-focus on the input field when the component mounts
         const inputField = document.getElementById("user-input");
         if (inputField) {
             inputField.focus();
@@ -27,7 +24,7 @@ const Chatbot = () => {
             setResponses((prevResponses) => [...prevResponses, `You said: ${userInput}`]);
 
             try {
-                const response = await fetch("http://localhost:5000/suggest_doctor", {
+                const response = await fetch("http://127.0.0.1:5000/suggest_doctor", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -35,11 +32,15 @@ const Chatbot = () => {
                     body: JSON.stringify({ symptoms: userInput }),
                 });
 
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.statusText}`);
+                }
+
                 const data = await response.json();
-                setResponses((prevResponses) => [...prevResponses, data.message]);
+                setResponses((prevResponses) => [...prevResponses, data.message || "No response from server."]);
             } catch (error) {
                 console.error("Error:", error);
-                setResponses((prevResponses) => [...prevResponses, "Error: Unable to reach the backend."]);
+                setResponses((prevResponses) => [...prevResponses, `Error: ${error.message || "Unable to reach the backend."}`]);
             }
 
             setUserInput(""); // Clear input after sending
@@ -60,7 +61,6 @@ const Chatbot = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-            {/* Background Image Div */}
             <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
@@ -69,7 +69,6 @@ const Chatbot = () => {
             >
                 <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
             </div>
-            {/* Chatbot Container */}
             <div className="chatbot-container w-full max-w-md p-6 bg-white rounded-lg shadow-2xl border border-gray-200 mt-10 z-10 relative transform transition-transform duration-300 hover:scale-105">
                 <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">🤖 Health Chatbot</h2>
                 <div className="chatbox border border-gray-300 p-4 h-72 overflow-y-auto rounded-lg bg-gray-100 shadow-inner" ref={chatboxRef}>
@@ -107,3 +106,4 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
+
