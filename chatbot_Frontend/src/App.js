@@ -65,7 +65,7 @@ function App() {
             <div className="container flex flex-col md:flex-row gap-8 w-full max-w-3xl p-4">
                 {/* Registration Form */}
                 <div className="form-container bg-white rounded-lg shadow-2xl p-6 flex-1 transition-transform transform hover:scale-105">
-                    <h2 className="text-2xl font-semibold text-gray-700 mb-4">Register</h2>
+                    <h2 className="text-2xl font-semibold text-gray-700 mb-4">REGSITER</h2>
                     <input type="text" name="name" placeholder="Name" value={registerData.name} onChange={handleRegisterChange} className="w-full p-3 mb-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />
                     <input type="number" name="age" placeholder="Age" value={registerData.age} onChange={handleRegisterChange} min="0" className="w-full p-3 mb-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />
                     <input type="text" name="gender" placeholder="Gender" value={registerData.gender} onChange={handleRegisterChange} className="w-full p-3 mb-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />
@@ -78,7 +78,7 @@ function App() {
 
                 {/* Login and OTP Verification Form */}
                 <div className="form-container bg-white rounded-lg shadow-2xl p-6 flex-1 transition-transform transform hover:scale-105">
-                    <h2 className="text-2xl font-semibold text-gray-700 mb-4">Send OTP</h2>
+                    <h2 className="text-2xl font-semibold text-gray-700 mb-4">LOGIN</h2>
                     <div className="flex mb-4">
                         <span className="flex items-center p-3 bg-gray-200 border border-gray-300 rounded-l-lg">+91</span>
                         <input type="tel" placeholder="Mobile Number" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} className="w-full p-3 border border-gray-300 rounded-r-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />

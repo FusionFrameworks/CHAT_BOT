@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect, useRef } from "react";
 
 const Chatbot = () => {
     const [userInput, setUserInput] = useState("");
     const [responses, setResponses] = useState([]);
     const [paymentAmount, setPaymentAmount] = useState("");
+    const [storedSymptoms, setStoredSymptoms] = useState(""); // Store user symptoms
+    const [consultationFee, setConsultationFee] = useState(null); // Store the consultation fee
     const chatboxRef = useRef();
 
     useEffect(() => {
@@ -16,36 +19,7 @@ const Chatbot = () => {
         }
 
         // Start speech recognition automatically after welcome message
-        startSpeechRecognition();
-
     }, []);
-
-    const startSpeechRecognition = () => {
-        // Check if the browser supports SpeechRecognition
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            console.log("Speech recognition not supported in this browser.");
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-        recognition.interimResults = false;
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            console.log("Speech recognized: ", transcript);
-            setUserInput(transcript);
-            handleSend(); // Automatically send the recognized input
-        };
-
-        recognition.onerror = (event) => {
-            console.error("Speech recognition error: ", event.error);
-        };
-
-        // Start recognition
-        recognition.start();
-    };
 
     const loadRazorpayScript = () => {
         return new Promise((resolve) => {
@@ -74,6 +48,7 @@ const Chatbot = () => {
         }
 
         setResponses((prevResponses) => [...prevResponses, `You said: ${userInput}`]);
+        setStoredSymptoms(userInput); // Store the user symptoms
 
         try {
             const response = await fetch("http://127.0.0.1:5000/suggest_doctor", {
@@ -89,8 +64,14 @@ const Chatbot = () => {
             }
 
             const data = await response.json();
-           console.log(data.message)
+            console.log(data.message);
             setResponses((prevResponses) => [...prevResponses, data.message || "No response from server."]);
+
+            // If a consultation fee is included in the response, store it
+            const feeMatch = data.message.match(/(?:\d+\.?\d*)/);
+            if (feeMatch) {
+                setConsultationFee(parseFloat(feeMatch[0])); // Store the consultation fee
+            }
         } catch (error) {
             console.error("Error:", error);
             setResponses((prevResponses) => [...prevResponses, `Error: ${error.message || "Unable to reach the backend."}`]);
@@ -102,6 +83,8 @@ const Chatbot = () => {
     const handleClearChat = () => {
         setResponses([]);
         setPaymentAmount(""); 
+        setStoredSymptoms(""); // Clear stored symptoms
+        setConsultationFee(null); // Clear stored consultation fee
         const welcomeMessage = "👋 Welcome to the Health Chatbot! How can I assist you today?";
         setResponses([welcomeMessage]);
     };
@@ -111,6 +94,12 @@ const Chatbot = () => {
 
         if (isNaN(amount) || amount <= 0) {
             alert("Please enter a valid positive amount.");
+            return;
+        }
+
+        // Check if the entered payment amount matches the consultation fee
+        if (consultationFee === null || amount !== consultationFee) {
+            alert(`Please enter the correct consultation fee of ₹ ${consultationFee}.`);
             return;
         }
 
@@ -140,7 +129,7 @@ const Chatbot = () => {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ symptoms: userInput }),
+                        body: JSON.stringify({ symptoms: storedSymptoms, payment_status: true }), // Include stored symptoms and payment status
                     });
 
                     if (!doctorResponse.ok) {
@@ -195,6 +184,7 @@ const Chatbot = () => {
         }
     }, [responses]);
 
+
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
             <div
@@ -232,25 +222,24 @@ const Chatbot = () => {
                 </div>
                 <button
                     onClick={handleClearChat}
-                    className="bg-red-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-red-700 transition duration-300 shadow-md transform hover:scale-105"
+                    className="bg-red-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-red-700 transition duration-300 shadow-md"
                 >
                     Clear Chat
                 </button>
-                {/* Payment Input */}
-                <div className="flex flex-col md:flex-row mt-4 space-y-2 md:space-y-0 md:space-x-2">
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold text-gray-800">💳 Make a Payment</h3>
                     <input
-                        type="number"
+                        type="text"
                         value={paymentAmount}
                         onChange={handlePaymentChange}
-                        placeholder="Enter amount to pay"
-                        className="border border-gray-300 rounded-lg p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 shadow-md hover:shadow-lg"
-                        min="0"
+                        placeholder="Enter amount"
+                        className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 shadow-md hover:shadow-lg"
                     />
                     <button
                         onClick={handlePayment}
-                        className="bg-green-600 text-white rounded-lg p-2 hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105"
+                        className="bg-green-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-green-700 transition duration-300 shadow-md"
                     >
-                        Pay
+                        Pay Now
                     </button>
                 </div>
             </div>

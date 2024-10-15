@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     gender: String,
     mobileNumber: String,
     otp: String,
-    otpExpiresAt: Date
+    otpExpiresAt: Date,
+    patientId: { type: String, unique: true }
 });
 
 // Export the User model
