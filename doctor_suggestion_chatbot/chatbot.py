@@ -16,7 +16,7 @@ USER_PHONE_NUMBER = '+918804339456'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Load the dataset once when the application starts
-dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
+dataset_path = 'C:/Users/varun/Documents/Dev/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
 df = None
 
 def load_dataset():
@@ -79,7 +79,7 @@ def suggest_doctor(df, user_symptoms, payment_status):
         doctor_name, specialization, price, room_number = best_doctor
         doctor_message = [
             "👨‍⚕️ Based on your symptoms, we recommend you consult:",
-            f"🔍 **For {specialization}**: {doctor_name}",
+            f"🔍 **  For {specialization}**: {doctor_name}",
             f"🏢 **Room Number**: {room_number}",
             "\nPlease feel free to consult them for the best care! 💖"
         ]
