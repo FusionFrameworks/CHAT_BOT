@@ -70,28 +70,6 @@ function App() {
   };
 
   return (
-    // <div className="App min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-blue-500">
-    //     <h1 className="text-4xl font-bold text-white mb-8">APP NAME</h1>
-    //     <div className="container flex flex-col md:flex-row gap-8 w-full max-w-3xl p-4">
-    //         {/* Login and OTP Verification Form */}
-    //         <div className="form-container bg-white rounded-lg shadow-2xl p-6 flex-1 transition-transform transform hover:scale-105">
-    //             <h2 className="text-2xl font-semibold text-gray-700 mb-4">LOGIN</h2>
-    //             <div className="flex mb-4">
-    //                 <span className="flex items-center p-3 bg-gray-200 border border-gray-300 rounded-l-lg">+91</span>
-    //                 <input type="tel" placeholder="Mobile Number" value={mobileNumber} onChange={(e) => setMobileNumber(e.target.value)} className="w-full p-3 border border-gray-300 rounded-r-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />
-    //             </div>
-    //             <button onClick={handleSendOtp} className="w-full p-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200 transform hover:scale-105">Send OTP</button>
-
-    //             <h2 className="text-2xl font-semibold text-gray-700 mb-4 mt-6">Verify OTP</h2>
-    //             <input type="number" placeholder="Enter OTP" value={otp} onChange={(e) => { const value = e.target.value; if (value >= 0) setOtp(value); }} className="w-full p-3 mb-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition-transform transform hover:scale-105" />
-    //             <button onClick={handleVerifyOtp} className="w-full p-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200 transform hover:scale-105">Verify OTP</button>
-    //         </div>
-    //     </div>
-
-    //     {/* Message Display */}
-    //     {message && <p className="message-highlight text-center text-white font-bold mt-4">{message}</p>}
-    // </div>
-
     <div className="App min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-blue-500">
       <h1 className="text-4xl font-bold text-white mb-8">APP NAME</h1>
       <div className="container flex flex-col md:flex-row gap-8 w-full max-w-3xl p-4">
