@@ -1,24 +1,21 @@
-
 import React, { useState, useEffect, useRef } from "react";
 
 const Chatbot = () => {
     const [userInput, setUserInput] = useState("");
     const [responses, setResponses] = useState([]);
     const [paymentAmount, setPaymentAmount] = useState("");
-    const [storedSymptoms, setStoredSymptoms] = useState(""); // Store user symptoms
-    const [consultationFee, setConsultationFee] = useState(null); // Store the consultation fee
+    const [storedSymptoms, setStoredSymptoms] = useState("");
+    const [consultationFee, setConsultationFee] = useState(null);
     const chatboxRef = useRef();
 
     useEffect(() => {
         const welcomeMessage = "👋 Welcome to the Health Chatbot! How can I assist you today?";
-        setResponses([welcomeMessage]);
-
+        setResponses([{ text: welcomeMessage, sender: "bot" }]);
+        
         const inputField = document.getElementById("user-input");
         if (inputField) {
             inputField.focus();
         }
-
-        // Start speech recognition automatically after welcome message
     }, []);
 
     const loadRazorpayScript = () => {
@@ -40,15 +37,16 @@ const Chatbot = () => {
     };
 
     const handleSend = async () => {
-        console.log("User input before sending:", userInput);
-        
         if (userInput.trim() === "") {
             alert("Please enter your symptoms before sending.");
             return;
         }
 
-        setResponses((prevResponses) => [...prevResponses, `You said: ${userInput}`]);
-        setStoredSymptoms(userInput); // Store the user symptoms
+        setResponses((prevResponses) => [
+            ...prevResponses, 
+            { text: `You said: ${userInput}`, sender: "user" }
+        ]);
+        setStoredSymptoms(userInput);
 
         try {
             const response = await fetch("http://127.0.0.1:5000/suggest_doctor", {
@@ -58,46 +56,48 @@ const Chatbot = () => {
                 },
                 body: JSON.stringify({ symptoms: userInput }),
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
-            console.log(data.message);
-            setResponses((prevResponses) => [...prevResponses, data.message || "No response from server."]);
+            setResponses((prevResponses) => [
+                ...prevResponses, 
+                { text: data.message || "No response from server.", sender: "bot" }
+            ]);
 
-            // If a consultation fee is included in the response, store it
             const feeMatch = data.message.match(/(?:\d+\.?\d*)/);
             if (feeMatch) {
-                setConsultationFee(parseFloat(feeMatch[0])); // Store the consultation fee
+                setConsultationFee(parseFloat(feeMatch[0]));
             }
         } catch (error) {
-            console.error("Error:", error);
-            setResponses((prevResponses) => [...prevResponses, `Error: ${error.message || "Unable to reach the backend."}`]);
+            setResponses((prevResponses) => [
+                ...prevResponses, 
+                { text: `Error: ${error.message || "Unable to reach the backend."}`, sender: "bot" }
+            ]);
         }
 
-        setUserInput(""); 
+        setUserInput("");
     };
 
     const handleClearChat = () => {
         setResponses([]);
-        setPaymentAmount(""); 
-        setStoredSymptoms(""); // Clear stored symptoms
-        setConsultationFee(null); // Clear stored consultation fee
+        setPaymentAmount("");
+        setStoredSymptoms("");
+        setConsultationFee(null);
         const welcomeMessage = "👋 Welcome to the Health Chatbot! How can I assist you today?";
-        setResponses([welcomeMessage]);
+        setResponses([{ text: welcomeMessage, sender: "bot" }]);
     };
 
     const handlePayment = async () => {
-        const amount = parseFloat(paymentAmount); 
+        const amount = parseFloat(paymentAmount);
 
         if (isNaN(amount) || amount <= 0) {
             alert("Please enter a valid positive amount.");
             return;
         }
 
-        // Check if the entered payment amount matches the consultation fee
         if (consultationFee === null || amount !== consultationFee) {
             alert(`Please enter the correct consultation fee of ₹ ${consultationFee}.`);
             return;
@@ -119,17 +119,16 @@ const Chatbot = () => {
             handler: async function (response) {
                 setResponses((prevResponses) => [
                     ...prevResponses,
-                    `Payment successful! Payment ID: ${response.razorpay_payment_id}`,
+                    { text: `Payment successful! Payment ID: ${response.razorpay_payment_id}`, sender: "bot" },
                 ]);
 
-                // Fetch doctor suggestions again after successful payment
                 try {
                     const doctorResponse = await fetch("http://127.0.0.1:5000/suggest_doctor", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ symptoms: storedSymptoms, payment_status: true }), // Include stored symptoms and payment status
+                        body: JSON.stringify({ symptoms: storedSymptoms, payment_status: true }),
                     });
 
                     if (!doctorResponse.ok) {
@@ -139,13 +138,12 @@ const Chatbot = () => {
                     const doctorData = await doctorResponse.json();
                     setResponses((prevResponses) => [
                         ...prevResponses,
-                        doctorData.message || "No response from doctor suggestion.",
+                        { text: doctorData.message || "No response from doctor suggestion.", sender: "bot" },
                     ]);
                 } catch (error) {
-                    console.error("Error:", error);
                     setResponses((prevResponses) => [
                         ...prevResponses,
-                        `Error fetching doctor suggestions: ${error.message}`,
+                        { text: `Error fetching doctor suggestions: ${error.message}`, sender: "bot" },
                     ]);
                 }
             },
@@ -159,10 +157,10 @@ const Chatbot = () => {
                 color: "#3399cc",
             },
             method: {
-                upi: true,       
-                card: true,      
-                netbanking: true, 
-                wallet: true     
+                upi: true,
+                card: true,
+                netbanking: true,
+                wallet: true,
             },
         };
 
@@ -172,7 +170,6 @@ const Chatbot = () => {
 
     const handlePaymentChange = (e) => {
         const value = e.target.value;
-
         if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
             setPaymentAmount(value);
         }
@@ -184,7 +181,6 @@ const Chatbot = () => {
         }
     }, [responses]);
 
-
     return (
         <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
             <div
@@ -195,13 +191,25 @@ const Chatbot = () => {
             >
                 <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
             </div>
-            <div className="chatbot-container w-full max-w-md p-6 bg-white rounded-lg shadow-2xl border border-gray-200 mt-10 z-10 relative transform transition-transform duration-300 hover:scale-105">
+            <div className="chatbot-container w-full max-w-lg p-6 bg-white rounded-lg shadow-2xl border border-gray-200 mt-10 z-10 relative transform transition-transform duration-300 hover:scale-105">
                 <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">🤖 Health Chatbot</h2>
                 <div className="chatbox border border-gray-300 p-4 h-72 overflow-y-auto rounded-lg bg-gray-100 shadow-inner" ref={chatboxRef}>
                     {responses.map((response, index) => (
-                        <p key={index} className="mb-2 text-gray-800 transition-all duration-300 transform hover:text-blue-600">
-                            {response}
-                        </p>
+                        <div
+                            key={index}
+                            className={`flex ${response.sender === "user" ? "justify-end" : "justify-start"} mb-2 animate-fade-in`}
+                        >
+                            <div
+                                className={`p-3 rounded-2xl max-w-xs shadow-lg ${
+                                    response.sender === "user"
+                                        ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-br-none"
+                                        : "bg-gradient-to-r from-gray-300 to-gray-400 text-gray-900 rounded-bl-none"
+                                }`}
+                                style={{ animationDelay: `${index * 0.1}s` }}
+                            >
+                                {response.text}
+                            </div>
+                        </div>
                     ))}
                 </div>
                 <div className="flex flex-col md:flex-row mt-4 space-y-2 md:space-y-0 md:space-x-2">
@@ -232,12 +240,12 @@ const Chatbot = () => {
                         type="text"
                         value={paymentAmount}
                         onChange={handlePaymentChange}
-                        placeholder="Enter amount"
-                        className="border border-gray-300 rounded-lg p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 shadow-md hover:shadow-lg"
+                        placeholder="Enter consultation fee"
+                        className="border border-gray-300 rounded-lg p-2 w-full mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-300 shadow-md hover:shadow-lg"
                     />
                     <button
                         onClick={handlePayment}
-                        className="bg-green-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-green-700 transition duration-300 shadow-md"
+                        className="bg-green-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105"
                     >
                         Pay Now
                     </button>
@@ -248,3 +256,5 @@ const Chatbot = () => {
 };
 
 export default Chatbot;
+
+
