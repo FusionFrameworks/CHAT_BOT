@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid'); // Import uuid for generating unique IDs
 
 // Twilio configuration - directly hardcoded values
-const client = new twilio('AC0a8e940a64f34356ad286610ab428a7a', 'ebd0cef9ce64fb4c45afd4d38a918be6');
-const twilioServiceSid = 'VAf7c33a2f0e116adbf7da7309e36fd8b7';
+const client = new twilio('ACa58e5d71b82a166aa33bb9f1c37e9d22', 'd5449ef48c110c6c104ac59ae276d2fe');
+const twilioServiceSid = 'VAb528bad60ed0802b60e72fc7100efb34';
 
 // JWT secret key
 const jwtSecret = 'YOUR_JWT_SECRET_KEY';
