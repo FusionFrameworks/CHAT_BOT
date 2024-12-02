@@ -16,7 +16,8 @@ USER_PHONE_NUMBER = '+918804339456'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Load the dataset once when the application starts
-dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
+# dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
+dataset_path = os.path.join(os.path.dirname(__file__), 'doctor_suggestion_chatbot', 'dataset.csv')
 df = None
 
 def load_dataset():
