@@ -17,8 +17,11 @@ client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Load the dataset once when the application starts
 # dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
-dataset_path = os.path.join(os.path.dirname(__file__), 'doctor_suggestion_chatbot', 'dataset.csv')
+dataset_path = os.path.abspath(os.path.join('doctor_suggestion_chatbot', 'dataset.csv'))
+print(f"Absolute dataset path: {dataset_path}")
 df = None
+
+print(f"Current working directory: {os.getcwd()}")
 
 def load_dataset():
     global df
