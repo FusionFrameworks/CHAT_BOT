@@ -1,5 +1,6 @@
-ChatBot_Backend/config/db.js
 
-chatbot_Frontend\node_modules\.cache
-chatbot_Frontend\node_modules\
+chatbot_Frontend/node_modules/.cache
+chatbot_Frontend/node_modules/
 
+ChatBot_Backend/node_modules/
+CHAT_BOT/ChatBot_Backend/node_modules

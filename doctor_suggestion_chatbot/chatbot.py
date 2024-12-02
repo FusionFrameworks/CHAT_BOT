@@ -16,10 +16,9 @@ USER_PHONE_NUMBER = '+918804339456'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Load the dataset once when the application starts
-# dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
-dataset_path = os.path.abspath(os.path.join('doctor_suggestion_chatbot', 'dataset.csv'))
-print(f"Absolute dataset path: {dataset_path}")
+dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
 df = None
+
 
 print(f"Current working directory: {os.getcwd()}")
 
@@ -82,9 +81,9 @@ def suggest_doctor(df, user_symptoms, payment_status):
     if best_doctor and max_match_count >= 2:
         doctor_name, specialization, price, room_number = best_doctor
         doctor_message = [
-            "👨‍⚕️ Based on your symptoms, we recommend you consult:",
-            f"🔍 **  For {specialization}**: {doctor_name}",
-            f"🏢 **Room Number**: {room_number}",
+            "👨‍⚕ Based on your symptoms, we recommend you consult:",
+            f"🔍 **  For {specialization}: {doctor_name}",
+            f"🏢 *Room Number*: {room_number}",
             "\nPlease feel free to consult them for the best care! 💖"
         ]
 
@@ -118,4 +117,3 @@ def handle_suggest_doctor():
 
 if __name__ == "__main__":
     app.run(debug=True)
-

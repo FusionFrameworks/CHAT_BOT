@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const paymentSchema = new mongoose.Schema({
     paymentId: { type: String, unique: true },
     patientId: { type: String, required: false },
-    name:{type: String, required: false},
+    name: String,
     amount: Number,
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
     createdAt: { type: Date, default: Date.now }
