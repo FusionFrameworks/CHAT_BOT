@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
 
 const Chatbot = () => {
     const [userInput, setUserInput] = useState("");
@@ -117,36 +118,61 @@ const Chatbot = () => {
             name: "Health Chatbot Service",
             description: "Chatbot Assistance Payment",
             handler: async function (response) {
+                const paymentId = response.razorpay_payment_id;
+            
+                // Display payment success message in chatbot
                 setResponses((prevResponses) => [
                     ...prevResponses,
-                    { text: `Payment successful! Payment ID: ${response.razorpay_payment_id}`, sender: "bot" },
+                    { text: `Payment successful! Payment ID: ${paymentId}`, sender: "bot" },
                 ]);
-
-                try {
-                    const doctorResponse = await fetch("http://127.0.0.1:5000/suggest_doctor", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ symptoms: storedSymptoms, payment_status: true }),
-                    });
-
-                    if (!doctorResponse.ok) {
-                        throw new Error(`Server error: ${doctorResponse.statusText}`);
+            
+                // try {
+                    // Fetch patientId and name from the session using the get-session API
+                    const sessionResponse = await axios.get("http://localhost:5000/api/auth/get-session");
+            
+                    if (sessionResponse.status === 200) {
+                        const { patientId, name } = sessionResponse.data;
+            
+                        // Send payment ID, patientId, and name to Node.js API
+                        await axios.post("http://localhost:5000/api/auth/store-payment", {
+                            paymentId: paymentId,
+                            status: "completed",
+                            patientId: patientId,  // Including patientId
+                            name: name             // Including name
+                        });
+            
+                        console.log(`Payment ID ${paymentId} sent successfully to Node.js API.`);
+            
+                        // Fetch doctor suggestions
+                        const doctorResponse = await fetch("http://127.0.0.1:5000/suggest_doctor", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ symptoms: storedSymptoms, payment_status: true }),
+                        });
+            
+                        if (!doctorResponse.ok) {
+                            throw new Error(`Server error: ${doctorResponse.statusText}`);
+                        }
+            
+                        const doctorData = await doctorResponse.json();
+                        setResponses((prevResponses) => [
+                            ...prevResponses,
+                            { text: doctorData.message || "No response from doctor suggestion.", sender: "bot" },
+                        ]);
+                    } else {
+                        throw new Error("Session data not found. Please log in first.");
                     }
-
-                    const doctorData = await doctorResponse.json();
-                    setResponses((prevResponses) => [
-                        ...prevResponses,
-                        { text: doctorData.message || "No response from doctor suggestion.", sender: "bot" },
-                    ]);
-                } catch (error) {
-                    setResponses((prevResponses) => [
-                        ...prevResponses,
-                        { text: `Error fetching doctor suggestions: ${error.message}`, sender: "bot" },
-                    ]);
-                }
-            },
+            
+                // } catch (error) {
+                //     setResponses((prevResponses) => [
+                //         ...prevResponses,
+                //         { text: `Error: ${error.message}`, sender: "bot" },
+                //     ]);
+                //     console.error("Error during payment or doctor suggestion flow:", error);
+                // }
+            },                    
             prefill: {
                 name: "CareLink",
                 email: "carelink@gmail.com",
@@ -162,7 +188,7 @@ const Chatbot = () => {
                 netbanking: true,
                 wallet: true,
             },
-        };
+        };     
 
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();

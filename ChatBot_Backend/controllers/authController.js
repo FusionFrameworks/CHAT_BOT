@@ -1,26 +1,326 @@
+
+// // const User = require('../models/userModel');
+// // const Notification = require('../models/notificationModel'); // Import the Notification model
+// // const twilio = require('twilio');
+// // const jwt = require('jsonwebtoken');
+// // const { v4: uuidv4 } = require('uuid');
+
+// // // Twilio configuration
+// // const client = new twilio('ACa58e5d71b82a166aa33bb9f1c37e9d22', 'd5449ef48c110c6c104ac59ae276d2fe');
+// // const twilioServiceSid = 'VAb528bad60ed0802b60e72fc7100efb34';
+
+// // // JWT secret key
+// // const jwtSecret = 'YOUR_JWT_SECRET_KEY';
+
+// // // Function to select a Twilio number
+// // const selectTwilioNumber = () => {
+// //     const twilioNumbers = ['+919632983944', '+918804339456'];
+// //     const randomIndex = Math.floor(Math.random() * twilioNumbers.length);
+// //     return twilioNumbers[randomIndex];
+// // };
+
+// // // Registration Handler
+// // const registerUser = async (req, res) => {
+// //     const { name, age, gender, mobileNumber } = req.body;
+
+// //     try {
+// //         const existingUser = await User.findOne({ mobileNumber });
+// //         if (existingUser) {
+// //             return res.status(400).json({ message: 'User already exists' });
+// //         }
+
+// //         const patientId = uuidv4(); // Generate a unique ID
+// //         const newUser = new User({ name, age, gender, mobileNumber, patientId });
+// //         await newUser.save();
+// //         res.status(201).json({ message: 'User registered successfully', patientId });
+// //     } catch (error) {
+// //         console.error("Error during registration:", error);
+// //         res.status(500).json({ message: 'Internal Server Error' });
+// //     }
+// // };
+
+// // // Login Handler (OTP Generation)
+// // const loginUser = async (req, res) => {
+// //     const { mobileNumber } = req.body;
+
+// //     try {
+// //         const user = await User.findOne({ mobileNumber });
+// //         if (!user) {
+// //             return res.status(404).json({ message: 'User not found' });
+// //         }
+
+// //         const twilioNumber = selectTwilioNumber();
+// //         await client.verify.v2.services(twilioServiceSid)
+// //             .verifications
+// //             .create({ to: mobileNumber, channel: 'sms', from: twilioNumber });
+
+// //         res.status(200).json({ message: 'OTP sent successfully' });
+// //     } catch (error) {
+// //         console.error("Error sending OTP:", error);
+// //         res.status(500).json({ message: 'Failed to send OTP' });
+// //     }
+// // };
+
+// // // OTP Verification Handler
+// // const verifyOTP = async (req, res) => {
+// //     const { mobileNumber, otp } = req.body;
+
+// //     try {
+// //         const user = await User.findOne({ mobileNumber });
+// //         if (!user) {
+// //             return res.status(404).json({ message: 'User not found' });
+// //         }
+
+// //         await client.verify.v2.services(twilioServiceSid)
+// //             .verificationChecks
+// //             .create({ to: mobileNumber, code: otp })
+// //             .then(async (verification_check) => {
+// //                 if (verification_check.status === 'approved') {
+// //                     const token = jwt.sign({ mobileNumber }, jwtSecret, { expiresIn: '1h' });
+
+// //                     // Add notification to the database
+// //                     const newNotification = new Notification({
+// //                         name: user.name,
+// //                         patientId: user.patientId,
+// //                     });
+
+// //                     // Save notification to the database
+// //                     await newNotification.save();
+// //                     console.log('Notification saved:', newNotification);
+
+// //                     res.status(200).json({
+// //                         message: 'Login successful',
+// //                         token,
+// //                         name: user.name,
+// //                         patientId: user.patientId,
+// //                     });
+// //                 } else {
+// //                     res.status(400).json({ message: 'Invalid or expired OTP' });
+// //                 }
+// //             });
+// //     } catch (error) {
+// //         console.error("Error verifying OTP:", error);
+// //         res.status(500).json({ message: 'Failed to verify OTP' });
+// //     }
+// // };
+
+// // // Get Notifications Handler
+// // const getNotifications = async (req, res) => {
+// //     try {
+// //         const notifications = await Notification.find(); // Fetch all notifications from the database
+// //         console.log('Fetching notifications from DB:', notifications);
+// //         res.status(200).json({ notifications });
+// //     } catch (error) {
+// //         console.error('Error fetching notifications:', error);
+// //         res.status(500).json({ message: 'Failed to fetch notifications' });
+// //     }
+// // };
+
+// // module.exports = {
+// //     registerUser,
+// //     loginUser,
+// //     verifyOTP,
+// //     getNotifications,
+// // };
+
+
+
+
+
+
+// const User = require('../models/userModel');
+// const Notification = require('../models/notificationModel');
+// const twilio = require('twilio');
+// const jwt = require('jsonwebtoken');
+// const { v4: uuidv4 } = require('uuid');
+
+// // Twilio configuration
+// const client = new twilio('ACa58e5d71b82a166aa33bb9f1c37e9d22', 'd5449ef48c110c6c104ac59ae276d2fe');
+// const twilioServiceSid = 'VAb528bad60ed0802b60e72fc7100efb34';
+
+// // JWT secret key
+// const jwtSecret = 'YOUR_JWT_SECRET_KEY';
+
+// // Function to select a Twilio number
+// const selectTwilioNumber = () => {
+//     const twilioNumbers = ['+919632983944', '+918804339456'];
+//     return twilioNumbers[Math.floor(Math.random() * twilioNumbers.length)];
+// };
+
+// // Registration Handler
+// const registerUser = async (req, res) => {
+//     const { name, age, gender, mobileNumber } = req.body;
+
+//     try {
+//         const existingUser = await User.findOne({ mobileNumber });
+//         if (existingUser) {
+//             return res.status(400).json({ message: 'User already exists' });
+//         }
+
+//         const patientId = uuidv4();
+//         const newUser = new User({ name, age, gender, mobileNumber, patientId });
+//         await newUser.save();
+//         res.status(201).json({ message: 'User registered successfully', patientId });
+//     } catch (error) {
+//         console.error("Error during registration:", error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// };
+
+// // Login Handler (OTP Generation)
+// const loginUser = async (req, res) => {
+//     const { mobileNumber } = req.body;
+
+//     try {
+//         const user = await User.findOne({ mobileNumber });
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         const twilioNumber = selectTwilioNumber();
+//         await client.verify.v2.services(twilioServiceSid)
+//             .verifications
+//             .create({ to: mobileNumber, channel: 'sms', from: twilioNumber });
+
+//         res.status(200).json({ message: 'OTP sent successfully' });
+//     } catch (error) {
+//         console.error("Error sending OTP:", error);
+//         res.status(500).json({ message: 'Failed to send OTP' });
+//     }
+// };
+
+// const verifyOTP = async (req, res) => {
+//     const { mobileNumber, otp } = req.body;
+
+//     try {
+//         const user = await User.findOne({ mobileNumber });
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         await client.verify.v2.services(twilioServiceSid)
+//             .verificationChecks
+//             .create({ to: mobileNumber, code: otp })
+//             .then(async (verification_check) => {
+//                 if (verification_check.status === 'approved') {
+//                     const token = jwt.sign({ mobileNumber, patientId: user.patientId }, jwtSecret, { expiresIn: '1h' });
+
+//                     const newNotification = new Notification({
+//                         name: user.name,
+//                         patientId: user.patientId,
+//                     });
+
+//                     await newNotification.save();
+
+//                     // Emit real-time notification
+//                     global.io.emit('new-notification', newNotification);
+
+//                     res.status(200).json({
+//                         message: 'Login successful',
+//                         token,
+//                         name: user.name,
+//                         patientId: user.patientId,
+//                     });
+//                 } else {
+//                     res.status(400).json({ message: 'Invalid or expired OTP' });
+//                 }
+//             });
+//     } catch (error) {
+//         console.error("Error verifying OTP:", error);
+//         res.status(500).json({ message: 'Failed to verify OTP' });
+//     }
+// };
+
+
+// const getNotifications = async (req, res) => {
+//     const token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
+//     if (!token) {
+//         return res.status(401).json({ message: 'Authorization token is required' });
+//     }
+
+//     try {
+//         // Verify token
+//         const decoded = jwt.verify(token, jwtSecret);
+
+//         // Find notifications for the specific patientId
+//         const notifications = await Notification.find({ patientId: decoded.patientId }).select('name patientId');
+
+//         res.status(200).json({ notifications });
+//     } catch (error) {
+//         console.error('Error fetching notifications:', error);
+//         res.status(500).json({ message: 'Failed to fetch notifications' });
+//     }
+// };
+
+
+
+
+
+// const deleteNotificationByPatientId = async (req, res) => {
+//     const { patientId } = req.body;  // Assuming you send the patientId in the body
+
+//     try {
+//         // Delete notifications based on patientId
+//         const result = await Notification.deleteMany({ patientId });
+
+//         if (result.deletedCount > 0) {
+//             res.status(200).json({ message: `Notifications deleted for patientId: ${patientId}` });
+//         } else {
+//             res.status(404).json({ message: `No notifications found for patientId: ${patientId}` });
+//         }
+//     } catch (error) {
+//         console.error('Error deleting notifications:', error);
+//         res.status(500).json({ message: 'Failed to delete notifications' });
+//     }
+// };
+
+
+// // module.exports = {
+// //     registerUser,
+// //     loginUser,
+// //     verifyOTP,
+// //     getNotifications,
+// //     deleteNotificationByPatientId, // Add the new function here
+// // };
+
+
+
+
+
+// module.exports = {
+//     registerUser,
+//     loginUser,
+//     verifyOTP,
+//     deleteNotificationByPatientId,
+//     getNotifications,
+// };
+
+
+
+
+
+
+
+
 const User = require('../models/userModel');
+const Notification = require('../models/notificationModel');
 const twilio = require('twilio');
 const jwt = require('jsonwebtoken');
-const { v4: uuidv4 } = require('uuid'); // Import uuid for generating unique IDs
+const { v4: uuidv4 } = require('uuid');
+const Payment = require('../models/paymentModel');
 
-// Twilio configuration - directly hardcoded values
+
+// Twilio configuration
 const client = new twilio('ACa58e5d71b82a166aa33bb9f1c37e9d22', 'd5449ef48c110c6c104ac59ae276d2fe');
 const twilioServiceSid = 'VAb528bad60ed0802b60e72fc7100efb34';
 
 // JWT secret key
 const jwtSecret = 'YOUR_JWT_SECRET_KEY';
 
-// Array of Twilio numbers
-const twilioNumbers = [
-    '+919632983944', // First Twilio number
-    '+918804339456', // Second Twilio number
-    // Add more numbers as needed
-];
-
-// Function to select a Twilio number
+// Helper function to select a Twilio number
 const selectTwilioNumber = () => {
-    const randomIndex = Math.floor(Math.random() * twilioNumbers.length);
-    return twilioNumbers[randomIndex];
+    const twilioNumbers = ['+919632983944', '+918804339456'];
+    return twilioNumbers[Math.floor(Math.random() * twilioNumbers.length)];
 };
 
 // Registration Handler
@@ -30,86 +330,177 @@ const registerUser = async (req, res) => {
     try {
         const existingUser = await User.findOne({ mobileNumber });
         if (existingUser) {
-            return res.status(400).json({ message: 'User with this mobile number already exists' });
+            return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Generate a unique patient ID
-        const patientId = uuidv4(); // Generate a new UUID
-
-        const newUser = new User({ name, age, gender, mobileNumber, patientId }); // Store patientId
+        const patientId = uuidv4();
+        const newUser = new User({ name, age, gender, mobileNumber, patientId });
         await newUser.save();
-        res.status(201).json({ message: 'User registered successfully', patientId }); // Return patient ID if needed
+
+        res.status(201).json({ message: 'User registered successfully', patientId });
     } catch (error) {
         console.error("Error during registration:", error);
-        res.status(500).json({ message: 'Internal Server Error', error });
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
-// OTP Generation Handler
+// Login Handler (OTP Generation)
+// const loginUser = async (req, res) => {
+//     const { mobileNumber } = req.body;
+
+//     try {
+//         const user = await User.findOne({ mobileNumber });
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found' });
+//         }
+
+//         const twilioNumber = selectTwilioNumber();
+//         await client.verify.v2.services(twilioServiceSid)
+//             .verifications
+//             .create({ to: mobileNumber, channel: 'sms', from: twilioNumber });
+
+//         res.status(200).json({ message: 'OTP sent successfully' });
+//     } catch (error) {
+//         console.error("Error sending OTP:", error);
+//         res.status(500).json({ message: 'Failed to send OTP' });
+//     }
+// };
+
 const loginUser = async (req, res) => {
     const { mobileNumber } = req.body;
 
     try {
+        // Find user by mobile number
         const user = await User.findOne({ mobileNumber });
+
+        // Check if the user exists
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Generate and send OTP using Twilio
         const twilioNumber = selectTwilioNumber();
-        console.log(`Selected Twilio number for OTP: ${twilioNumber}`);
-
         await client.verify.v2.services(twilioServiceSid)
             .verifications
-            .create({ to: mobileNumber, channel: 'sms', from: twilioNumber })
-            .then(verification => {
-                console.log(`OTP sent to ${mobileNumber}: Verification SID ${verification.sid}`);
-                res.status(200).json({ message: 'OTP sent successfully' });
-            })
-            .catch(error => {
-                console.error("Error sending OTP:", error);
-                res.status(500).json({ message: 'Failed to send OTP', error: error.message });
-            });
+            .create({ to: mobileNumber, channel: 'sms', from: twilioNumber });
+
+        res.status(200).json({ message: 'OTP sent successfully' });
     } catch (error) {
-        console.error("Error during login:", error);
-        res.status(500).json({ message: 'Internal Server Error', error });
+        console.error("Error sending OTP:", error);
+        res.status(500).json({ message: 'Failed to send OTP' });
     }
 };
 
-// OTP Verification Handler
+
+// OTP Verification and Login
 const verifyOTP = async (req, res) => {
     const { mobileNumber, otp } = req.body;
 
     try {
+        // Find the user by mobile number
         const user = await User.findOne({ mobileNumber });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        await client.verify.v2.services(twilioServiceSid)
+        // Verify OTP using Twilio
+        const verificationCheck = await client.verify.v2.services(twilioServiceSid)
             .verificationChecks
-            .create({ to: mobileNumber, code: otp })
-            .then(verification_check => {
-                if (verification_check.status === 'approved') {
-                    console.log(`OTP verified for ${mobileNumber}`);
-                    const token = jwt.sign({ mobileNumber }, jwtSecret, { expiresIn: '1h' });
-                    res.status(200).json({ message: 'Login successful', token });
-                } else {
-                    console.log(`Failed OTP verification for ${mobileNumber}`);
-                    res.status(400).json({ message: 'Invalid or expired OTP' });
-                }
-            })
-            .catch(error => {
-                console.error("Error verifying OTP:", error);
-                res.status(500).json({ message: 'Failed to verify OTP', error: error.message });
+            .create({ to: mobileNumber, code: otp });
+
+        if (verificationCheck.status === 'approved') {
+            // Create a session and store patientId and name
+            req.session.user = {
+                patientId: user.patientId,
+                name: user.name,
+            };
+
+            // Create a new notification entry (if required, but not necessary for real-time communication)
+            const newNotification = new Notification({
+                name: user.name,
+                patientId: user.patientId,
             });
+
+            await newNotification.save();
+
+            // Respond with success
+            return res.status(200).json({
+                message: 'Login successful',
+                name: user.name,
+                patientId: user.patientId,
+            });
+        } else {
+            // Handle invalid or expired OTP
+            return res.status(400).json({ message: 'Invalid or expired OTP' });
+        }
     } catch (error) {
-        console.error("Error during OTP verification:", error);
-        res.status(500).json({ message: 'Internal Server Error', error });
+        console.error("Error verifying OTP:", error);
+        // Ensure only one response is sent in case of error
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Failed to verify OTP' });
+        }
     }
 };
 
+
+
+// Fetch Notifications
+const getNotifications = async (req, res) => {
+    try {
+        // Fetch all notifications
+        const notifications = await Notification.find();
+
+        // Get completed payments based on payment status
+        const completedPayments = await Payment.find({ status: 'completed' });
+
+        // Create a Set of patientIds with completed payments for faster lookup
+        const completedPatientIds = new Set(completedPayments.map(payment => payment.patientId));
+
+        // Filter notifications to include only those with completed payments
+        const filteredNotifications = notifications.filter(notification =>
+            completedPatientIds.has(notification.patientId)
+        );
+
+        // Map the filtered notifications to return only relevant details (Patient ID and Name)
+        const response = filteredNotifications.map(notification => ({
+            patientId: notification.patientId,
+            name: notification.name
+        }));
+
+        res.status(200).json({ notifications: response });
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+        res.status(500).json({ message: 'Failed to fetch notifications' });
+    }
+};
+
+// Delete Notifications by Patient ID
+const deleteNotificationByPatientId = async (req, res) => {
+    const { patientId } = req.body;
+
+    if (!patientId) {
+        return res.status(400).json({ message: 'Patient ID is required' });
+    }
+
+    try {
+        const result = await Notification.deleteMany({ patientId });
+
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: `Notifications deleted for patientId: ${patientId}` });
+        } else {
+            res.status(404).json({ message: `No notifications found for patientId: ${patientId}` });
+        }
+    } catch (error) {
+        console.error('Error deleting notifications:', error);
+        res.status(500).json({ message: 'Failed to delete notifications' });
+    }
+};
+
+// Export all functions
 module.exports = {
     registerUser,
     loginUser,
-    verifyOTP
+    verifyOTP,
+    getNotifications,
+    deleteNotificationByPatientId,
 };

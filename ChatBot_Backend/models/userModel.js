@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
     mobileNumber: String,
     otp: String,
     otpExpiresAt: Date,
-    patientId: { type: String, unique: true }
+    patientId: { type: String, unique: true },
+    paymentId: { type: String, unique: true } // Add paymentId field
+
 });
 
 // Export the User model
