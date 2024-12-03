@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { Bounce } from "react-toastify"; // For transitions
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "react-toastify/dist/ReactToastify.css";
 
 const Chatbot = () => {
@@ -9,7 +10,9 @@ const Chatbot = () => {
   const [responses, setResponses] = useState([]);
   const [storedSymptoms, setStoredSymptoms] = useState("");
   const [consultationFee, setConsultationFee] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(false); // New state for payment status
   const chatboxRef = useRef();
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const welcomeMessage =
@@ -180,6 +183,9 @@ const Chatbot = () => {
         } else {
           throw new Error("Session data not found. Please log in first.");
         }
+
+        // Set payment status to true (successful)
+        setPaymentStatus(true);
       },
       prefill: {
         name: "CareLink",
@@ -214,6 +220,9 @@ const Chatbot = () => {
       theme: "colored",
       transition: Bounce,
     });
+
+    // Set payment status to false (failed)
+    setPaymentStatus(false);
   };
 
   useEffect(() => {
@@ -247,65 +256,83 @@ const Chatbot = () => {
         <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
       </div>
       <div className="chatbot-container w-full max-w-lg p-6 bg-white rounded-lg shadow-2xl border border-gray-200 mt-10 z-10 relative transform transition-transform duration-300 hover:scale-105">
-        <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
-          🤖 Health Chatbot
-        </h2>
-        <div
-          className="chatbox border border-gray-300 p-4 h-72 overflow-y-auto rounded-lg bg-gray-100 shadow-inner"
-          ref={chatboxRef}
-        >
+        <div className="flex justify-between items-center mb-4">
+          <button
+            onClick={() => navigate("/welcome")}
+            className="flex items-center text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Back
+          </button>
+          <h2 className="text-2xl font-semibold text-center text-gray-800">
+            🤖 Health Chatbot
+          </h2>
+        </div>
+        <div className="chat-box max-h-96 overflow-y-auto" ref={chatboxRef}>
           {responses.map((response, index) => (
             <div
               key={index}
               className={`flex ${
                 response.sender === "user" ? "justify-end" : "justify-start"
-              } mb-2 animate-fade-in`}
+              } mb-2`}
             >
               <div
-                className={`p-3 rounded-2xl max-w-xs shadow-lg ${
+                className={`px-4 py-2 rounded-lg max-w-xs ${
                   response.sender === "user"
-                    ? "bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-br-none"
-                    : "bg-gradient-to-r from-gray-300 to-gray-400 text-gray-900 rounded-bl-none"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-black"
                 }`}
-                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {response.text}
               </div>
             </div>
           ))}
         </div>
-        <div className="flex flex-col md:flex-row mt-4 space-y-2 md:space-y-0 md:space-x-2">
+        <div className="flex mt-4 space-x-4">
           <input
-            id="user-input"
             type="text"
+            id="user-input"
             value={userInput}
             onChange={handleUserInput}
+            className="flex-1 border border-gray-300 rounded-lg px-4 py-2"
             placeholder="Enter your symptoms"
-            className="w-full md:w-3/4 border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={handleSend}
-            className="w-full md:w-1/4 bg-gradient-to-r from-green-400 to-green-600 text-white p-2 rounded-md hover:bg-green-700"
+            className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-3 rounded-lg hover:bg-blue-700"
           >
             Send
           </button>
         </div>
-        <div className="flex flex-row mt-4 justify-between gap-2">
-          {consultationFee !== null && (
+        {consultationFee && consultationFee > 0 && !paymentStatus && (
+          <div className="mt-4">
             <button
               onClick={handlePayment}
-              className="w-full md:w-1/2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700"
+              className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white p-3 rounded-lg hover:bg-green-700"
             >
-              Proceed with Consultation Payment
+              Pay ₹{consultationFee} for Consultation
             </button>
-          )}
-          <button
-            onClick={handleClearChat}
-            className="w-full bg-gradient-to-r bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
-          >
-            Clear Chat
-          </button>
-        </div>
+          </div>
+        )}
+        <button
+          onClick={handleClearChat}
+          className="w-full bg-red-600 text-white p-2 rounded-lg mt-4 hover:bg-red-700"
+        >
+          Clear Chat
+        </button>
       </div>
     </div>
   );
