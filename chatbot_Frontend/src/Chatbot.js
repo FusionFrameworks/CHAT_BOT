@@ -256,10 +256,10 @@ const Chatbot = () => {
         <div className="absolute inset-0 bg-black opacity-50 backdrop-blur-lg"></div>
       </div>
       <div className="chatbot-container w-full max-w-lg p-6 bg-white rounded-lg shadow-2xl border border-gray-200 mt-10 z-10 relative transform transition-transform duration-300 hover:scale-105">
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col items-center mb-4">
           <button
             onClick={() => navigate("/welcome")}
-            className="flex items-center text-gray-600 hover:text-gray-800"
+            className="absolute left-4 flex items-center text-gray-600 hover:text-gray-800"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -275,13 +275,12 @@ const Chatbot = () => {
                 d="M15 19l-7-7 7-7"
               />
             </svg>
-            Back
           </button>
-          <h2 className="text-2xl font-semibold text-center text-gray-800">
+          <h2 className="text-2xl font-semibold text-gray-800">
             🤖 Health Chatbot
           </h2>
         </div>
-        <div className="chat-box max-h-96 overflow-y-auto" ref={chatboxRef}>
+        <div className="chat-box max-h-[50%] overflow-y-auto" ref={chatboxRef}>
           {responses.map((response, index) => (
             <div
               key={index}
