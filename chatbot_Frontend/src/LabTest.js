@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"; // Added useState and useEffect
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Bounce } from "react-toastify"; // For transitions
+import { Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const labTests = [
@@ -91,9 +91,10 @@ const labTests = [
 ];
 
 const LabTests = () => {
-  const [selectedTest, setSelectedTest] = useState(null);
+  const [selectedTests, setSelectedTests] = useState([]);
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
+  const [showGuidelines, setShowGuidelines] = useState(false);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -106,14 +107,20 @@ const LabTests = () => {
     };
   }, []);
 
-  const handleSelectTest = (test) => {
-    setSelectedTest(test);
+  const toggleTestSelection = (test) => {
+    setSelectedTests((prev) =>
+      prev.includes(test)
+        ? prev.filter((t) => t !== test)
+        : [...prev, test]
+    );
     setIsPaymentSuccess(false);
+    setShowGuidelines(false);
   };
 
   const handlePaymentSuccess = () => {
     setIsPaymentSuccess(true);
     setIsPaymentProcessing(false);
+    setShowGuidelines(true);
     toast.success("Payment successful! You can now view the test guidelines.", {
       position: "top-right",
       autoClose: 5000,
@@ -126,7 +133,6 @@ const LabTests = () => {
       transition: Bounce,
     });
   };
-  
 
   const handlePaymentFailure = () => {
     setIsPaymentProcessing(false);
@@ -142,14 +148,27 @@ const LabTests = () => {
       transition: Bounce,
     });
   };
-  
 
-  const initiatePayment = (test) => {
+  const initiatePayment = () => {
+    if (selectedTests.length === 0) {
+      toast.warn("Please select at least one test before proceeding to payment.", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      return;
+    }
+
     if (window.Razorpay) {
       setIsPaymentProcessing(true);
+      const totalAmount = selectedTests.reduce(
+        (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
+        0
+      ) * 100;
+
       const options = {
         key: "rzp_test_lmkOFuIPmT2vi9",
-        amount: parseFloat(test.price.replace("₹", "")) * 100,
+        amount: totalAmount,
         currency: "INR",
         name: "Health App",
         description: "Lab Test Payment",
@@ -180,68 +199,84 @@ const LabTests = () => {
   };
 
   return (
-    <div className="p-6 bg-light-gray rounded-lg shadow-2xl">
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        transition={toast.Bounce}
-      />
-      <h2 className="text-3xl font-semibold text-soft-blue mb-4">
-        Available Lab Tests
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {labTests.map((test, index) => (
-          <div
-            key={index}
-            className={`p-4 border rounded-lg shadow-lg transition-transform transform ${
-              selectedTest === test
-                ? "bg-blue-50 border-blue-500"
-                : "hover:scale-105"
-            }`}
-          >
-            <h3 className="text-xl font-bold text-gray-800">{test.name}</h3>
-            <p className="text-gray-600">Price: {test.price}</p>
-            <button
-              className="mt-2 bg-soft-blue text-white px-4 py-2 rounded-lg shadow-lg"
-              onClick={() => handleSelectTest(test)}
+    <div className="flex flex-col md:flex-row md:space-x-6 p-6 bg-light-gray rounded-lg shadow-2xl">
+      <div className="w-full md:w-3/4 bg-white p-4 rounded-lg shadow-lg">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          transition={toast.Bounce}
+        />
+        <h2 className="text-3xl font-semibold text-soft-blue mb-6">
+          Available Lab Tests
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {labTests.map((test, index) => (
+            <div
+              key={index}
+              className={`p-6 border rounded-lg shadow-lg transition-transform transform ${
+                selectedTests.includes(test)
+                  ? "bg-blue-50 border-blue-500"
+                  : "hover:scale-105"
+              }`}
             >
-              View Guidelines
-            </button>
-            {selectedTest === test && !isPaymentSuccess && (
-              <div className="mt-2">
-                <h4 className="text-lg font-semibold text-gray-700">
-                  Please make a payment to view guidelines:
-                </h4>
-                <button
-                  className={`mt-2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg ${
-                    isPaymentProcessing ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                  onClick={() => initiatePayment(test)}
-                  disabled={isPaymentProcessing}
-                >
-                  {isPaymentProcessing ? "Processing..." : "Pay Now"}
-                </button>
-              </div>
-            )}
-            {selectedTest === test && isPaymentSuccess && (
-              <div className="mt-2">
-                <h4 className="text-lg font-semibold text-gray-700">
-                  Guidelines:
-                </h4>
-                <p className="text-gray-600">{test.guidelines}</p>
-              </div>
-            )}
-          </div>
-        ))}
+              <h3 className="text-xl font-bold text-gray-800">{test.name}</h3>
+              <p className="text-gray-600">Price: {test.price}</p>
+              <button
+                className={`mt-2 px-4 py-2 rounded-lg shadow-lg ${
+                  selectedTests.includes(test)
+                    ? "bg-red-500 text-white"
+                    : "bg-soft-blue text-white"
+                }`}
+                onClick={() => toggleTestSelection(test)}
+              >
+                {selectedTests.includes(test) ? "Deselect" : "Select"}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* Sidebar for Selected Tests */}
+      <div className="w-full md:w-1/4 bg-white shadow-lg p-6 rounded-lg mt-6 md:mt-0">
+        <h4 className="text-xl font-semibold text-gray-700 mb-4">Selected Tests:</h4>
+        <ul className="list-disc list-inside mb-4">
+          {selectedTests.map((test, index) => (
+            <li key={index} className="text-gray-600">
+              {test.name} - {test.price}
+            </li>
+          ))}
+        </ul>
+        <button
+          className={`w-full py-3 rounded-lg text-white ${
+            selectedTests.length > 0 ? "bg-green-500" : "bg-gray-400"
+          }`}
+          onClick={initiatePayment}
+          disabled={selectedTests.length === 0 || isPaymentProcessing}
+        >
+          {isPaymentProcessing ? "Processing..." : "Proceed to Payment"}
+        </button>
+      </div>
+
+      {/* Displaying Guidelines After Payment */}
+      {showGuidelines && (
+        <div className="mt-8 p-4 bg-gray-100 rounded-lg">
+          <h3 className="text-2xl font-semibold text-gray-700">Test Guidelines</h3>
+          {selectedTests.map((test, index) => (
+            <div key={index} className="mt-4 p-4 bg-white rounded-lg shadow-md">
+              <h4 className="text-xl font-semibold">{test.name}</h4>
+              <p className="text-gray-600">{test.guidelines}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
