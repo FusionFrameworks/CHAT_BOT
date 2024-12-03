@@ -1,68 +1,68 @@
 Symptoms,Specialization,Doctor,Price,Room Number
-"High temperature, chills, sweating, headache",General Physician,Dr. Arjun Sharma,₹740,101
-"Fever, cough, sore throat, runny nose",General Physician,Dr. Priya Verma,₹840,102
-"Sore throat, runny nose, coughing, sneezing",General Physician,Dr. Amit Gupta,₹940,103
-"Dull pain, pressure in the head, sensitivity to light",Neurologist,Dr. Suresh Rao,₹10660,201
-"Abdominal pain, bloating, nausea, vomiting",Gastroenterologist,Dr. Nisha Patel,₹9840,202
-"Sneezing, itchy eyes, runny nose, rash",Allergist,Dr. Rohan Mehta,₹9840,203
-"Increased thirst, frequent urination, fatigue",Endocrinologist,Dr. Kavita Joshi,₹11480,301
-"Headaches, shortness of breath, nosebleeds",Cardiologist,Dr. Vikram Singh,₹12300,302
-"Wheezing, coughing, chest tightness, shortness of breath",Pulmonologist,Dr. Sneha Iyer,₹10660,303
-"Joint pain, swelling, stiffness",Rheumatologist,Dr. Rahul Nair,₹9020,401
-"Severe headache, nausea, sensitivity to light",Neurologist,Dr. Anjali Choudhary,₹10660,204
-"Cough, fever, difficulty breathing",Pulmonologist,Dr. Sanjay Reddy,₹10660,305
-"Cough, production of mucus, fatigue",Pulmonologist,Dr. Meera Bhattacharya,₹10660,306
-"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Gaurav Kapoor,₹12300,307
-"Severe pain in the side, blood in urine, nausea",Urologist,Dr. Ramesh Iyer,₹8500,404
-"Fatigue, weakness, pale skin",Hematologist,Dr. Neelam Sethi,₹9000,501
-"Heartburn, regurgitation, difficulty swallowing",Gastroenterologist,Dr. Amar Thakur,₹9840,202
-"Fatigue, weight changes, sensitivity to temperature",Endocrinologist,Dr. Sheetal Deshmukh,₹11480,302
-"Intense joint pain, swelling, redness",Rheumatologist,Dr. Vinay Patil,₹9020,402
-"Redness, swelling, warmth, pus",Dermatologist,Dr. Pooja Jain,₹8000,502
-"Nasal congestion, facial pain, headache",Otolaryngologist,Dr. Arvind Kumar,₹8500,503
-"Persistent fatigue, sleep disturbances",Psychiatrist,Dr. Nitin Desai,₹10500,601
-"Sadness, loss of interest, fatigue",Psychiatrist,Dr. Rhea Malhotra,₹10500,602
-"Restlessness, rapid heartbeat, excessive worry",Psychologist,Dr. Tanuja Shetty,₹8000,603
-"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Raghav Gupta,₹12300,308
-"Bone fractures, back pain, loss of height",Endocrinologist,Dr. Suman Kaur,₹11480,303
-"Abdominal pain, bloating, diarrhea, constipation",Gastroenterologist,Dr. Akash Menon,₹9840,204
-"Abdominal pain, nausea, vomiting",Surgeon,Dr. Deepak Sinha,₹15000,701
-"Bulge in the abdomen, pain, discomfort",Surgeon,Dr. Sonali Chawla,₹15000,702
-"Jaundice, abdominal pain, swelling",Hepatologist,Dr. Kunal Shah,₹12000,803
-"Sudden pain in the abdomen, nausea, vomiting",Gastroenterologist,Dr. Arti Verma,₹9840,205
-"Diarrhea, bloating, fatigue",Dietitian,Dr. Preeti Joshi,₹5000,804
-"Itchy skin, redness, dryness",Dermatologist,Dr. Rajesh Kumar,₹8000,505
-"Red patches, dry skin, itching",Dermatologist,Dr. Priyanka Agarwal,₹8000,506
-"Redness, swelling, itching",Dermatologist,Dr. Sanjay Bhatia,₹8000,507
-"Nausea, vomiting, diarrhea",Infectious Disease Specialist,Dr. Aarti Gupta,₹10000,805
-"Rapid heartbeat, sweating, trembling",Psychiatrist,Dr. Karan Mehta,₹10500,608
-"Recurrent intrusive thoughts, anxiety",Psychologist,Dr. Anjali Dutta,₹8000,609
-"Re-experiencing trauma, hyperarousal",Psychiatrist,Dr. Shalini Kapoor,₹10500,610
-"Loud snoring, gasping for air, daytime fatigue",Gynecologist,Dr. Meera Malhotra,₹9500,901
-"Irregular periods, hormonal imbalances",Gynecologist,Dr. Kavita Bhardwaj,₹9500,902
-"Pelvic pain, fever, unusual discharge",Gynecologist,Dr. Neha Verma,₹9500,903
-"Painful urination, frequent urge to urinate",Urologist,Dr. Rakesh Joshi,₹8500,404
-"Hot flashes, mood swings, irregular periods",Gynecologist,Dr. Ritu Singh,₹9500,904
-"Loss of libido, erectile dysfunction",Psychiatrist,Dr. Arvind Kumar,₹10500,611
-"Irregular periods, hormonal imbalances",Pediatrician,Dr. Nikhil Bansal,₹9500,905
-"Developmental delays, behavioral issues",Pediatrician,Dr. Sakshi Sharma,₹9500,906
-"Memory loss, confusion, mood changes",Geriatrician,Dr. Ravi Desai,₹11000,907
-"Cough, sore throat, difficulty breathing",Infectious Disease Specialist,Dr. Anand Iyer,₹10000,806
-"Fever, cough, loss of taste and smell",Pediatrician,Dr. Vinod Agarwal,₹9500,908
-"Itchy rash, fever, fatigue",Pediatrician,Dr. Jyoti Rani,₹9500,909
-"High fever, cough, runny nose, red spots",Pediatrician,Dr. Prakash Verma,₹9000,910
-"Swollen salivary glands, fever, headache",Pediatrician,Dr. Mohit Singh,₹9400,911
-"Fever, sore throat, red rash",Pediatrician,Dr. Priti Joshi,₹9600,912
-"Cough, weight loss, night sweats",Infectious Disease Specialist,Dr. Sanjeev Bansal,₹10000,807
-"Flu-like symptoms, fever, fatigue",Infectious Disease Specialist,Dr. Rohan Gupta,₹11000,808
-"Fatigue, jaundice, abdominal pain",Infectious Disease Specialist,Dr. Tarun Nair,₹12000,809
-"Sore throat, difficulty swallowing, fever",Pediatrician,Dr. Aastha Bansal,₹9500,913
-"Coughing, wheezing, difficulty breathing",Pediatrician,Dr. Ritika Kapoor,₹7500,914
-"Pimples, blackheads, oily skin",Dermatologist,Dr. Vineet Sharma,₹8000,506
-"Thinning hair, bald patches",Dermatologist,Dr. Arjun Soni,₹8000,507
-"Itchy skin, redness, swelling",Infectious Disease Specialist,Dr. Rina Iyer,₹10000,810
-"Fever, chills, fatigue",Infectious Disease Specialist,Dr. Saurabh Kumar,₹10000,811
-"Fever, fatigue, body aches",Infectious Disease Specialist,Dr. Kavita Mehta,₹10000,812
-"Abdominal pain, diarrhea",Pediatrician,Dr. Parul Gupta,₹9500,915
-"Fatigue, weakness, brittle nails",Nutritionist,Dr. Shreya Nair,₹8000,916
-"Weight gain, difficulty losing weight",Nutritionist,Dr. Nidhi Agarwal,₹8000,917
+"High temperature, chills, sweating, headache",General Physician,Dr. Arjun Sharma,₹400,101
+"Fever, cough, sore throat, runny nose",General Physician,Dr. Priya Verma,₹400,102
+"Sore throat, runny nose, coughing, sneezing",General Physician,Dr. Amit Gupta,₹400,103
+"Dull pain, pressure in the head, sensitivity to light",Neurologist,Dr. Suresh Rao,₹600,201
+"Abdominal pain, bloating, nausea, vomiting",Gastroenterologist,Dr. Nisha Patel,₹600,202
+"Sneezing, itchy eyes, runny nose, rash",Allergist,Dr. Rohan Mehta,₹600,203
+"Increased thirst, frequent urination, fatigue",Endocrinologist,Dr. Kavita Joshi,₹600,301
+"Headaches, shortness of breath, nosebleeds",Cardiologist,Dr. Vikram Singh,₹600,302
+"Wheezing, coughing, chest tightness, shortness of breath",Pulmonologist,Dr. Sneha Iyer,₹600,303
+"Joint pain, swelling, stiffness",Rheumatologist,Dr. Rahul Nair,₹500,401
+"Severe headache, nausea, sensitivity to light",Neurologist,Dr. Anjali Choudhary,₹600,204
+"Cough, fever, difficulty breathing",Pulmonologist,Dr. Sanjay Reddy,₹600,305
+"Cough, production of mucus, fatigue",Pulmonologist,Dr. Meera Bhattacharya,₹600,306
+"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Gaurav Kapoor,₹600,307
+"Severe pain in the side, blood in urine, nausea",Urologist,Dr. Ramesh Iyer,₹500,404
+"Fatigue, weakness, pale skin",Hematologist,Dr. Neelam Sethi,₹500,501
+"Heartburn, regurgitation, difficulty swallowing",Gastroenterologist,Dr. Amar Thakur,₹600,202
+"Fatigue, weight changes, sensitivity to temperature",Endocrinologist,Dr. Sheetal Deshmukh,₹600,302
+"Intense joint pain, swelling, redness",Rheumatologist,Dr. Vinay Patil,₹500,402
+"Redness, swelling, warmth, pus",Dermatologist,Dr. Pooja Jain,₹500,502
+"Nasal congestion, facial pain, headache",Otolaryngologist,Dr. Arvind Kumar,₹500,503
+"Persistent fatigue, sleep disturbances",Psychiatrist,Dr. Nitin Desai,₹600,601
+"Sadness, loss of interest, fatigue",Psychiatrist,Dr. Rhea Malhotra,₹600,602
+"Restlessness, rapid heartbeat, excessive worry",Psychologist,Dr. Tanuja Shetty,₹400,603
+"Chest pain, shortness of breath, fatigue",Cardiologist,Dr. Raghav Gupta,₹600,308
+"Bone fractures, back pain, loss of height",Endocrinologist,Dr. Suman Kaur,₹600,303
+"Abdominal pain, bloating, diarrhea, constipation",Gastroenterologist,Dr. Akash Menon,₹600,204
+"Abdominal pain, nausea, vomiting",Surgeon,Dr. Deepak Sinha,₹600,701
+"Bulge in the abdomen, pain, discomfort",Surgeon,Dr. Sonali Chawla,₹600,702
+"Jaundice, abdominal pain, swelling",Hepatologist,Dr. Kunal Shah,₹600,803
+"Sudden pain in the abdomen, nausea, vomiting",Gastroenterologist,Dr. Arti Verma,₹600,205
+"Diarrhea, bloating, fatigue",Dietitian,Dr. Preeti Joshi,₹400,804
+"Itchy skin, redness, dryness",Dermatologist,Dr. Rajesh Kumar,₹500,505
+"Red patches, dry skin, itching",Dermatologist,Dr. Priyanka Agarwal,₹500,506
+"Redness, swelling, itching",Dermatologist,Dr. Sanjay Bhatia,₹500,507
+"Nausea, vomiting, diarrhea",Infectious Disease Specialist,Dr. Aarti Gupta,₹500,805
+"Rapid heartbeat, sweating, trembling",Psychiatrist,Dr. Karan Mehta,₹600,608
+"Recurrent intrusive thoughts, anxiety",Psychologist,Dr. Anjali Dutta,₹400,609
+"Re-experiencing trauma, hyperarousal",Psychiatrist,Dr. Shalini Kapoor,₹600,610
+"Loud snoring, gasping for air, daytime fatigue",Gynecologist,Dr. Meera Malhotra,₹500,901
+"Irregular periods, hormonal imbalances",Gynecologist,Dr. Kavita Bhardwaj,₹500,902
+"Pelvic pain, fever, unusual discharge",Gynecologist,Dr. Neha Verma,₹500,903
+"Painful urination, frequent urge to urinate",Urologist,Dr. Rakesh Joshi,₹500,404
+"Hot flashes, mood swings, irregular periods",Gynecologist,Dr. Ritu Singh,₹500,904
+"Loss of libido, erectile dysfunction",Psychiatrist,Dr. Arvind Kumar,₹600,611
+"Irregular periods, hormonal imbalances",Pediatrician,Dr. Nikhil Bansal,₹500,905
+"Developmental delays, behavioral issues",Pediatrician,Dr. Sakshi Sharma,₹500,906
+"Memory loss, confusion, mood changes",Geriatrician,Dr. Ravi Desai,₹600,907
+"Cough, sore throat, difficulty breathing",Infectious Disease Specialist,Dr. Anand Iyer,₹500,806
+"Fever, cough, loss of taste and smell",Pediatrician,Dr. Vinod Agarwal,₹500,908
+"Itchy rash, fever, fatigue",Pediatrician,Dr. Jyoti Rani,₹500,909
+"High fever, cough, runny nose, red spots",Pediatrician,Dr. Prakash Verma,₹400,910
+"Swollen salivary glands, fever, headache",Pediatrician,Dr. Mohit Singh,₹400,911
+"Fever, sore throat, red rash",Pediatrician,Dr. Priti Joshi,₹400,912
+"Cough, weight loss, night sweats",Infectious Disease Specialist,Dr. Sanjeev Bansal,₹500,807
+"Flu-like symptoms, fever, fatigue",Infectious Disease Specialist,Dr. Rohan Gupta,₹600,808
+"Fatigue, jaundice, abdominal pain",Infectious Disease Specialist,Dr. Tarun Nair,₹600,809
+"Sore throat, difficulty swallowing, fever",Pediatrician,Dr. Aastha Bansal,₹500,913
+"Coughing, wheezing, difficulty breathing",Pediatrician,Dr. Ritika Kapoor,₹400,914
+"Pimples, blackheads, oily skin",Dermatologist,Dr. Vineet Sharma,₹500,506
+"Thinning hair, bald patches",Dermatologist,Dr. Arjun Soni,₹500,507
+"Itchy skin, redness, swelling",Infectious Disease Specialist,Dr. Rina Iyer,₹500,810
+"Fever, chills, fatigue",Infectious Disease Specialist,Dr. Saurabh Kumar,₹500,811
+"Fever, fatigue, body aches",Infectious Disease Specialist,Dr. Kavita Mehta,₹500,812
+"Abdominal pain, diarrhea",Pediatrician,Dr. Parul Gupta,₹500,915
+"Fatigue, weakness, brittle nails",Nutritionist,Dr. Shreya Nair,₹400,916
+"Weight gain, difficulty losing weight",Nutritionist,Dr. Nidhi Agarwal,₹400,917

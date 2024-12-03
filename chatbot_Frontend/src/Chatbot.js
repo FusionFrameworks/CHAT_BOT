@@ -4,7 +4,6 @@ import axios from "axios";
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
   const [responses, setResponses] = useState([]);
-  const [paymentAmount, setPaymentAmount] = useState("");
   const [storedSymptoms, setStoredSymptoms] = useState("");
   const [consultationFee, setConsultationFee] = useState(null);
   const chatboxRef = useRef();
@@ -88,7 +87,6 @@ const Chatbot = () => {
 
   const handleClearChat = () => {
     setResponses([]);
-    setPaymentAmount("");
     setStoredSymptoms("");
     setConsultationFee(null);
     const welcomeMessage =
@@ -97,17 +95,10 @@ const Chatbot = () => {
   };
 
   const handlePayment = async () => {
-    const amount = parseFloat(paymentAmount);
+    const amount = consultationFee;
 
     if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid positive amount.");
-      return;
-    }
-
-    if (consultationFee === null || amount !== consultationFee) {
-      alert(
-        `Please enter the correct consultation fee of ₹ ${consultationFee}.`
-      );
+      alert("There is an issue with the payment amount.");
       return;
     }
 
@@ -119,8 +110,8 @@ const Chatbot = () => {
     }
 
     const options = {
-      key: "rzp_test_lmkOFuIPmT2vi9",
-      amount: amount * 100,
+      key: "rzp_test_lmkOFuIPmT2vi9", // Replace with your Razorpay key
+      amount: amount * 100, // Amount in paise
       currency: "INR",
       name: "Health Chatbot Service",
       description: "Chatbot Assistance Payment",
@@ -136,8 +127,6 @@ const Chatbot = () => {
           },
         ]);
 
-        // try {
-        // Fetch patientId and name from the session using the get-session API
         const sessionResponse = await axios.get("/api/auth/get-session");
 
         if (sessionResponse.status === 200) {
@@ -147,13 +136,9 @@ const Chatbot = () => {
           await axios.post("/api/auth/store-payment", {
             paymentId: paymentId,
             status: "completed",
-            patientId: patientId, // Including patientId
-            name: name, // Including name
+            patientId: patientId,
+            name: name,
           });
-
-          console.log(
-            `Payment ID ${paymentId} sent successfully to Node.js API.`
-          );
 
           // Fetch doctor suggestions
           const doctorResponse = await fetch(
@@ -185,14 +170,6 @@ const Chatbot = () => {
         } else {
           throw new Error("Session data not found. Please log in first.");
         }
-
-        // } catch (error) {
-        //     setResponses((prevResponses) => [
-        //         ...prevResponses,
-        //         { text: `Error: ${error.message}`, sender: "bot" },
-        //     ]);
-        //     console.error("Error during payment or doctor suggestion flow:", error);
-        // }
       },
       prefill: {
         name: "CareLink",
@@ -213,13 +190,6 @@ const Chatbot = () => {
 
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
-  };
-
-  const handlePaymentChange = (e) => {
-    const value = e.target.value;
-    if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
-      setPaymentAmount(value);
-    }
   };
 
   useEffect(() => {
@@ -250,9 +220,7 @@ const Chatbot = () => {
           {responses.map((response, index) => (
             <div
               key={index}
-              className={`flex ${
-                response.sender === "user" ? "justify-end" : "justify-start"
-              } mb-2 animate-fade-in`}
+              className={`flex ${response.sender === "user" ? "justify-end" : "justify-start"} mb-2 animate-fade-in`}
             >
               <div
                 className={`p-3 rounded-2xl max-w-xs shadow-lg ${
@@ -273,38 +241,32 @@ const Chatbot = () => {
             type="text"
             value={userInput}
             onChange={handleUserInput}
-            placeholder="Type your symptoms..."
-            className="border border-gray-300 rounded-lg p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300 shadow-md hover:shadow-lg"
+            placeholder="Enter your symptoms"
+            className="w-full md:w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             onClick={handleSend}
-            className="bg-blue-600 text-white rounded-lg p-2 hover:bg-blue-700 transition duration-300 shadow-md transform hover:scale-105"
+            className="w-full md:w-1/4 bg-gradient-to-r from-blue-400 to-blue-600 text-white p-2 rounded-md hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-700"
           >
             Send
           </button>
         </div>
-        <button
-          onClick={handleClearChat}
-          className="bg-red-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-red-700 transition duration-300 shadow-md"
-        >
-          Clear Chat
-        </button>
-        <div className="mt-4">
-          <h3 className="text-lg font-semibold text-gray-800">
-            💳 Make a Payment
-          </h3>
-          <input
-            type="text"
-            value={paymentAmount}
-            onChange={handlePaymentChange}
-            placeholder="Enter consultation fee"
-            className="border border-gray-300 rounded-lg p-2 w-full mt-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-300 shadow-md hover:shadow-lg"
-          />
+        {consultationFee && (
+          <div className="mt-4">
+            <button
+              onClick={handlePayment}
+              className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white p-2 rounded-md hover:bg-gradient-to-r hover:from-green-500 hover:to-green-700"
+            >
+              Pay Now
+            </button>
+          </div>
+        )}
+        <div className="text-center mt-4">
           <button
-            onClick={handlePayment}
-            className="bg-green-600 text-white rounded-lg p-2 mt-2 w-full hover:bg-green-700 transition duration-300 shadow-md transform hover:scale-105"
+            onClick={handleClearChat}
+            className="w-full bg-gradient-to-r bg-red-500 text-white p-2 rounded-md hover:bg-red-600 "
           >
-            Pay Now
+            Clear Chat
           </button>
         </div>
       </div>
