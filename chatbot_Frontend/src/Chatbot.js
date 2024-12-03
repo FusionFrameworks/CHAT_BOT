@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import { Bounce } from "react-toastify"; // For transitions
+import "react-toastify/dist/ReactToastify.css";
 
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
@@ -86,12 +89,7 @@ const Chatbot = () => {
   };
 
   const handleClearChat = () => {
-    setResponses([]);
-    setStoredSymptoms("");
-    setConsultationFee(null);
-    const welcomeMessage =
-      "👋 Welcome to the Health Chatbot! How can I assist you today?";
-    setResponses([{ text: welcomeMessage, sender: "bot" }]);
+    window.location.reload();
   };
 
   const handlePayment = async () => {
@@ -118,7 +116,6 @@ const Chatbot = () => {
       handler: async function (response) {
         const paymentId = response.razorpay_payment_id;
 
-        // Display payment success message in chatbot
         setResponses((prevResponses) => [
           ...prevResponses,
           {
@@ -127,12 +124,26 @@ const Chatbot = () => {
           },
         ]);
 
+        toast.success(
+          "Payment Successful! You can now consult with the doctor.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+          }
+        );
+
         const sessionResponse = await axios.get("/api/auth/get-session");
 
         if (sessionResponse.status === 200) {
           const { patientId, name } = sessionResponse.data;
 
-          // Send payment ID, patientId, and name to Node.js API
           await axios.post("/api/auth/store-payment", {
             paymentId: paymentId,
             status: "completed",
@@ -140,7 +151,6 @@ const Chatbot = () => {
             name: name,
           });
 
-          // Fetch doctor suggestions
           const doctorResponse = await fetch(
             "http://127.0.0.1:5000/suggest_doctor",
             {
@@ -192,6 +202,20 @@ const Chatbot = () => {
     paymentObject.open();
   };
 
+  const handlePaymentFailure = () => {
+    toast.error("Payment failed or was canceled. Please try again.", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
+  };
+
   useEffect(() => {
     if (chatboxRef.current) {
       chatboxRef.current.scrollTop = chatboxRef.current.scrollHeight;
@@ -200,6 +224,19 @@ const Chatbot = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -220,7 +257,9 @@ const Chatbot = () => {
           {responses.map((response, index) => (
             <div
               key={index}
-              className={`flex ${response.sender === "user" ? "justify-end" : "justify-start"} mb-2 animate-fade-in`}
+              className={`flex ${
+                response.sender === "user" ? "justify-end" : "justify-start"
+              } mb-2 animate-fade-in`}
             >
               <div
                 className={`p-3 rounded-2xl max-w-xs shadow-lg ${
@@ -242,29 +281,27 @@ const Chatbot = () => {
             value={userInput}
             onChange={handleUserInput}
             placeholder="Enter your symptoms"
-            className="w-full md:w-3/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full md:w-3/4 border border-gray-300 rounded-md p-2 focus:outline-none focus:border-blue-500"
           />
           <button
             onClick={handleSend}
-            className="w-full md:w-1/4 bg-gradient-to-r from-blue-400 to-blue-600 text-white p-2 rounded-md hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-700"
+            className="w-full md:w-1/4 bg-gradient-to-r from-green-400 to-green-600 text-white p-2 rounded-md hover:bg-green-700"
           >
             Send
           </button>
         </div>
-        {consultationFee && (
-          <div className="mt-4">
+        <div className="flex flex-row mt-4 justify-between gap-2">
+          {consultationFee !== null && (
             <button
               onClick={handlePayment}
-              className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white p-2 rounded-md hover:bg-gradient-to-r hover:from-green-500 hover:to-green-700"
+              className="w-full md:w-1/2 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700"
             >
-              Pay Now
+              Proceed with Consultation Payment
             </button>
-          </div>
-        )}
-        <div className="text-center mt-4">
+          )}
           <button
             onClick={handleClearChat}
-            className="w-full bg-gradient-to-r bg-red-500 text-white p-2 rounded-md hover:bg-red-600 "
+            className="w-full bg-gradient-to-r bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
           >
             Clear Chat
           </button>
