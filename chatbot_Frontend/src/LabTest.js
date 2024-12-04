@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const labTests = [
   {
@@ -93,6 +94,7 @@ const LabTests = () => {
   const [selectedTests, setSelectedTests] = useState([]);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -113,11 +115,14 @@ const LabTests = () => {
 
   const initiatePayment = () => {
     if (selectedTests.length === 0) {
-      toast.warn("Please select at least one test before proceeding to payment.", {
-        position: "top-right",
-        autoClose: 3000,
-        theme: "colored",
-      });
+      toast.warn(
+        "Please select at least one test before proceeding to payment.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          theme: "colored",
+        }
+      );
       return;
     }
 
@@ -184,7 +189,30 @@ const LabTests = () => {
       {/* Main Content */}
       <div className="w-full md:w-3/4 bg-white p-4 rounded-lg shadow-lg">
         <ToastContainer />
-        <h2 className="text-3xl font-semibold text-soft-blue mb-6 underline">Available Lab Tests</h2>
+        <div className="flex flex-col items-center mb-4">
+          <button
+            onClick={() => navigate("/welcome")}
+            className="absolute left-10 flex items-center text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="4"
+              stroke="currentColor"
+              className="w-6 h-6 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <h2 className="text-3xl font-semibold text-soft-blue mb-6 underline">
+            Available Lab Tests
+          </h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {labTests.map((test, index) => (
             <div
@@ -221,7 +249,10 @@ const LabTests = () => {
           ) : (
             <div className="flex flex-col space-y-4">
               {selectedTests.map((test, index) => (
-                <div key={index} className="w-full p-4 border rounded-lg shadow-md bg-gray-100">
+                <div
+                  key={index}
+                  className="w-full p-4 border rounded-lg shadow-md bg-gray-100"
+                >
                   <h4 className="text-lg font-bold">{test.name}</h4>
                   <p className="text-gray-600">Price: {test.price}</p>
                 </div>
@@ -235,7 +266,9 @@ const LabTests = () => {
           <div className="mt-4 flex flex-col items-start space-y-2">
             <div className="p-3 bg-gray-200 rounded-lg w-full">
               <h4 className="text-sm font-bold text-gray-700">Total Cost:</h4>
-              <p className="text-lg font-semibold text-gray-800">₹{totalCost}</p>
+              <p className="text-lg font-semibold text-gray-800">
+                ₹{totalCost}
+              </p>
             </div>
             <button
               className={`w-full py-3 rounded-lg text-white ${
@@ -254,7 +287,9 @@ const LabTests = () => {
       {paymentSuccess && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[75%] md:w-[50%]">
-            <h3 className="text-xl font-semibold mb-4 underline text-soft-blue">Test Guidelines</h3>
+            <h3 className="text-xl font-semibold mb-4 underline text-soft-blue">
+              Test Guidelines
+            </h3>
             <div>
               {selectedTests.map((test, index) => (
                 <div key={index} className="mb-4">
