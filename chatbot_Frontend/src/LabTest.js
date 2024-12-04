@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const labTests = [
@@ -92,9 +91,8 @@ const labTests = [
 
 const LabTests = () => {
   const [selectedTests, setSelectedTests] = useState([]);
-  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
   const [isPaymentProcessing, setIsPaymentProcessing] = useState(false);
-  const [showGuidelines, setShowGuidelines] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -109,44 +107,8 @@ const LabTests = () => {
 
   const toggleTestSelection = (test) => {
     setSelectedTests((prev) =>
-      prev.includes(test)
-        ? prev.filter((t) => t !== test)
-        : [...prev, test]
+      prev.includes(test) ? prev.filter((t) => t !== test) : [...prev, test]
     );
-    setIsPaymentSuccess(false);
-    setShowGuidelines(false);
-  };
-
-  const handlePaymentSuccess = () => {
-    setIsPaymentSuccess(true);
-    setIsPaymentProcessing(false);
-    setShowGuidelines(true);
-    toast.success("Payment successful! You can now view the test guidelines.", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      transition: Bounce,
-    });
-  };
-
-  const handlePaymentFailure = () => {
-    setIsPaymentProcessing(false);
-    toast.error("Payment failed or was canceled. Please try again.", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      transition: Bounce,
-    });
   };
 
   const initiatePayment = () => {
@@ -159,65 +121,71 @@ const LabTests = () => {
       return;
     }
 
-    if (window.Razorpay) {
-      setIsPaymentProcessing(true);
-      const totalAmount = selectedTests.reduce(
-        (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
-        0
-      ) * 100;
+    // Total cost calculation
+    const totalAmount = selectedTests.reduce(
+      (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
+      0
+    );
 
-      const options = {
-        key: "rzp_test_lmkOFuIPmT2vi9",
-        amount: totalAmount,
-        currency: "INR",
-        name: "Health App",
-        description: "Lab Test Payment",
-        handler: (response) => {
-          if (response.razorpay_payment_id) {
-            handlePaymentSuccess();
-          }
-        },
-        prefill: {
-          name: "Test User",
-          email: "testuser@example.com",
-          contact: "+911234567890",
-        },
-        theme: {
-          color: "#3399cc",
-        },
-        modal: {
-          ondismiss: handlePaymentFailure,
-        },
-      };
+    // Razorpay options for the payment
+    const options = {
+      key: "rzp_test_lmkOFuIPmT2vi9", // Replace with your Razorpay key
+      amount: totalAmount * 100, // Amount in paise (₹1 = 100 paise)
+      currency: "INR",
+      name: "CareLink Labs",
+      description: "Payment for selected lab tests",
+      image: "https://your-logo-url.com/logo.png", // Optional logo image
+      handler: function (response) {
+        toast.success("Payment successful! Thank you for your payment.", {
+          position: "top-right",
+          autoClose: 5000,
+          theme: "colored",
+        });
+        setPaymentSuccess(true); // Show the guidelines card after payment success
+      },
+      prefill: {
+        name: "CareLink",
+        email: "carelink@gmail.com",
+        contact: "9999999999",
+        __prefill_vpa: "success@razorpay",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+      method: {
+        upi: true,
+        card: true,
+        netbanking: true,
+        wallet: true,
+      },
+    };
 
-      const razorpayInstance = new window.Razorpay(options);
-      razorpayInstance.open();
-    } else {
-      console.error("Razorpay SDK failed to load.");
-      handlePaymentFailure();
-    }
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open(); // Open the Razorpay checkout modal
+    setIsPaymentProcessing(true); // Set payment processing state
+
+    rzp1.on("payment.failed", function (response) {
+      toast.error("Payment failed. Please try again.", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "colored",
+      });
+      setIsPaymentProcessing(false); // Reset payment processing state
+    });
   };
 
+  const totalCost = selectedTests.reduce(
+    (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
+    0
+  );
+
   return (
-    <div className="flex flex-col md:flex-row md:space-x-6 p-6 bg-light-gray rounded-lg shadow-2xl">
+    <div className="min-h-screen flex flex-col md:flex-row p-6 bg-light-gray rounded-lg shadow-2xl">
+      {/* Main Content */}
       <div className="w-full md:w-3/4 bg-white p-4 rounded-lg shadow-lg">
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-          transition={toast.Bounce}
-        />
-        <h2 className="text-3xl font-semibold text-soft-blue mb-6">
-          Available Lab Tests
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <ToastContainer />
+        <h2 className="text-3xl font-semibold text-soft-blue mb-6 underline">Available Lab Tests</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {labTests.map((test, index) => (
             <div
               key={index}
@@ -227,13 +195,13 @@ const LabTests = () => {
                   : "hover:scale-105"
               }`}
             >
-              <h3 className="text-xl font-bold text-gray-800">{test.name}</h3>
+              <h3 className="text-xl font-bold">{test.name}</h3>
               <p className="text-gray-600">Price: {test.price}</p>
               <button
-                className={`mt-2 px-4 py-2 rounded-lg shadow-lg ${
+                className={`mt-2 px-4 py-2 rounded-lg ${
                   selectedTests.includes(test)
                     ? "bg-red-500 text-white"
-                    : "bg-soft-blue text-white"
+                    : "bg-blue-500 text-white"
                 }`}
                 onClick={() => toggleTestSelection(test)}
               >
@@ -244,37 +212,64 @@ const LabTests = () => {
         </div>
       </div>
 
-      {/* Sidebar for Selected Tests */}
-      <div className="w-full md:w-1/4 bg-white shadow-lg p-6 rounded-lg mt-6 md:mt-0">
-        <h4 className="text-xl font-semibold text-gray-700 mb-4">Selected Tests:</h4>
-        <ul className="list-disc list-inside mb-4">
-          {selectedTests.map((test, index) => (
-            <li key={index} className="text-gray-600">
-              {test.name} - {test.price}
-            </li>
-          ))}
-        </ul>
-        <button
-          className={`w-full py-3 rounded-lg text-white ${
-            selectedTests.length > 0 ? "bg-green-500" : "bg-gray-400"
-          }`}
-          onClick={initiatePayment}
-          disabled={selectedTests.length === 0 || isPaymentProcessing}
-        >
-          {isPaymentProcessing ? "Processing..." : "Proceed to Payment"}
-        </button>
+      {/* Sidebar */}
+      <div className="w-full md:w-1/4 bg-white shadow-lg p-6 rounded-lg md:ml-6 mt-6 md:mt-0 flex flex-col justify-between">
+        <div>
+          <h4 className="text-xl font-semibold mb-4">Selected Tests:</h4>
+          {selectedTests.length === 0 ? (
+            <p>No tests selected</p>
+          ) : (
+            <div className="flex flex-col space-y-4">
+              {selectedTests.map((test, index) => (
+                <div key={index} className="w-full p-4 border rounded-lg shadow-md bg-gray-100">
+                  <h4 className="text-lg font-bold">{test.name}</h4>
+                  <p className="text-gray-600">Price: {test.price}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Total Cost and Payment Button */}
+        {selectedTests.length > 0 && (
+          <div className="mt-4 flex flex-col items-start space-y-2">
+            <div className="p-3 bg-gray-200 rounded-lg w-full">
+              <h4 className="text-sm font-bold text-gray-700">Total Cost:</h4>
+              <p className="text-lg font-semibold text-gray-800">₹{totalCost}</p>
+            </div>
+            <button
+              className={`w-full py-3 rounded-lg text-white ${
+                selectedTests.length > 0 ? "bg-green-500" : "bg-gray-400"
+              }`}
+              onClick={initiatePayment}
+              disabled={isPaymentProcessing}
+            >
+              {isPaymentProcessing ? "Processing..." : "Proceed to Payment"}
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Displaying Guidelines After Payment */}
-      {showGuidelines && (
-        <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-          <h3 className="text-2xl font-semibold text-gray-700">Test Guidelines</h3>
-          {selectedTests.map((test, index) => (
-            <div key={index} className="mt-4 p-4 bg-white rounded-lg shadow-md">
-              <h4 className="text-xl font-semibold">{test.name}</h4>
-              <p className="text-gray-600">{test.guidelines}</p>
+      {/* Payment Success Modal */}
+      {paymentSuccess && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[75%] md:w-[50%]">
+            <h3 className="text-xl font-semibold mb-4 underline text-soft-blue">Test Guidelines</h3>
+            <div>
+              {selectedTests.map((test, index) => (
+                <div key={index} className="mb-4">
+                  <h4 className="text-lg font-bold">{test.name}</h4>
+                  <p className="text-gray-600">{test.guidelines}</p>
+                </div>
+              ))}
             </div>
-          ))}
+            <button
+              className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg"
+              onClick={() => setPaymentSuccess(false)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </div>
