@@ -125,13 +125,16 @@ const LabTests = () => {
       );
       return;
     }
-
+  
     // Total cost calculation
     const totalAmount = selectedTests.reduce(
       (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
       0
     );
-
+  
+    // Extracting test names
+    const testNames = selectedTests.map((test) => test.name).join(", ");
+  
     // Razorpay options for the payment
     const options = {
       key: "rzp_test_lmkOFuIPmT2vi9", // Replace with your Razorpay key
@@ -141,18 +144,39 @@ const LabTests = () => {
       description: "Payment for selected lab tests",
       image: "https://your-logo-url.com/logo.png", // Optional logo image
       handler: function (response) {
+        // Success Toast
         toast.success("Payment successful! Thank you for your payment.", {
           position: "top-right",
           autoClose: 5000,
           theme: "colored",
         });
         setPaymentSuccess(true); // Show the guidelines card after payment success
+  
+        // Call the Twilio Notification API
+        fetch("http://127.0.0.1:4000/send-notification", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: "+918804339456", // Replace with dynamic user's phone number
+            message: `Your payment was successful! You can now view the test guidelines for: ${testNames}`,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              console.log("Notification sent successfully.");
+            } else {
+              console.error("Failed to send notification:", data.error);
+            }
+          })
+          .catch((error) => console.error("Error sending notification:", error));
       },
       prefill: {
         name: "CareLink",
         email: "carelink@gmail.com",
         contact: "9999999999",
-        __prefill_vpa: "success@razorpay",
       },
       theme: {
         color: "#3399cc",
@@ -164,11 +188,11 @@ const LabTests = () => {
         wallet: true,
       },
     };
-
+  
     const rzp1 = new window.Razorpay(options);
     rzp1.open(); // Open the Razorpay checkout modal
     setIsPaymentProcessing(true); // Set payment processing state
-
+  
     rzp1.on("payment.failed", function (response) {
       toast.error("Payment failed. Please try again.", {
         position: "top-right",
@@ -178,7 +202,7 @@ const LabTests = () => {
       setIsPaymentProcessing(false); // Reset payment processing state
     });
   };
-
+  
   const totalCost = selectedTests.reduce(
     (sum, test) => sum + parseFloat(test.price.replace("₹", "")),
     0
@@ -260,6 +284,7 @@ const LabTests = () => {
             </div>
           )}
         </div>
+        
 
         {/* Total Cost and Payment Button */}
         {selectedTests.length > 0 && (
@@ -282,6 +307,7 @@ const LabTests = () => {
           </div>
         )}
       </div>
+      
 
       {/* Payment Success Modal */}
       {paymentSuccess && (
@@ -308,7 +334,12 @@ const LabTests = () => {
         </div>
       )}
     </div>
+    
   );
+  
 };
 
 export default LabTests;
+
+
+
