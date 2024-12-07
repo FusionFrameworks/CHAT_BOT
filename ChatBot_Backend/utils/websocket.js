@@ -24,16 +24,19 @@ const setupWebSocket = (server) => {
     try {
       const latestPayment = await Payment.findOne().sort({ createdAt: -1 });
       if (latestPayment) {
-        console.log("Latest Payment:", {
+        const message = {
+          type: "latestPayment",
           paymentId: latestPayment.paymentId,
           patientId: latestPayment.patientId,
           status: latestPayment.status,
           createdAt: latestPayment.createdAt,
-        });
+        };
+
+        console.log("Latest Payment:", message);
 
         connectedClients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(latestPayment));
+            client.send(JSON.stringify(message));
           }
         });
       }
@@ -45,20 +48,15 @@ const setupWebSocket = (server) => {
   // Helper function to send patients who have made payments
   const sendPatientsWithPayments = async () => {
     try {
-      // Get all payment entries
       const payments = await Payment.find();
-
-      // Get patient IDs from payments
       const patientIdsWithPayments = payments.map(
         (payment) => payment.patientId
       );
 
-      // Get users (patients) who have matching patientId in payments
       const usersWithPayments = await User.find({
         patientId: { $in: patientIdsWithPayments },
       });
 
-      // Map to extract only the required patient details
       const patientsDetails = usersWithPayments.map((user) => ({
         patientId: user.patientId,
         patientName: user.name,
@@ -67,17 +65,16 @@ const setupWebSocket = (server) => {
         mobileNumber: user.mobileNumber,
       }));
 
+      const message = {
+        type: "patientsWithPayments",
+        data: patientsDetails,
+      };
+
       console.log("Patients with Payments:", patientsDetails);
 
-      // Send patient data to all connected clients
       connectedClients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: "patientsWithPayments",
-              data: patientsDetails,
-            })
-          );
+          client.send(JSON.stringify(message));
         }
       });
     } catch (error) {
@@ -87,59 +84,52 @@ const setupWebSocket = (server) => {
 
   // Helper function to send the appointment count to all connected clients
   const sendAppointmentCount = () => {
+    const message = {
+      type: "appointmentCount",
+      count: appointmentCount,
+    };
+
     console.log("Total Appointments Count:", appointmentCount);
 
     connectedClients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(
-          JSON.stringify({ type: "appointmentCount", count: appointmentCount })
-        );
+        client.send(JSON.stringify(message));
       }
     });
   };
 
-  // Helper function to update appointment count based on payments
   const updateAppointmentCount = async () => {
     try {
-      // Get all payment entries
       const payments = await Payment.find();
-
-      // Get patient IDs from payments
       const patientIdsWithPayments = payments.map(
         (payment) => payment.patientId
       );
 
-      // Get users (patients) who have matching patientId in payments
       const usersWithPayments = await User.find({
         patientId: { $in: patientIdsWithPayments },
       });
 
-      // Set appointment count to the number of users with matching patientIds
       appointmentCount = usersWithPayments.length;
 
       console.log(`Updated appointment count: ${appointmentCount}`);
-      sendAppointmentCount(); // Send the updated count to clients
+      sendAppointmentCount();
     } catch (error) {
       console.error("Error updating appointment count:", error);
     }
   };
 
-  // Watch for changes in the Payment collection
   Payment.watch().on("change", async (change) => {
-    // If the change is an insert (new payment), we treat it as a new appointment
     if (change.operationType === "insert") {
       console.log("New payment added. Updating appointment count...");
-      await updateAppointmentCount(); // Update the appointment count
+      await updateAppointmentCount();
     }
 
-    await sendLatestPayment(); // Send the latest payment
-    await sendPatientsWithPayments(); // Send patients with payments
+    await sendLatestPayment();
+    await sendPatientsWithPayments();
   });
 
   console.log("WebSocket server is set up");
-
-  // Initialize appointment count by getting the number of patients who have made payments
-  updateAppointmentCount(); // Set the initial appointment count
+  updateAppointmentCount();
 };
 
 module.exports = setupWebSocket;
