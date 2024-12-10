@@ -113,7 +113,12 @@ def handle_suggest_doctor():
     payment_status = data.get("payment_status", False)
 
     result = suggest_doctor(df, symptoms, payment_status)
-    return jsonify(result)
+
+    # Include Room Number if doctor suggestion is found
+    if result.get("message") and "Room Number" in result.get("message"):
+        return jsonify(result)
+    else:
+        return jsonify(result)
 
 if __name__ == "__main__":
     app.run(debug=True)
