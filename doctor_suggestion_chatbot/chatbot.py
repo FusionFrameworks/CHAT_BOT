@@ -114,11 +114,16 @@ def handle_suggest_doctor():
 
     result = suggest_doctor(df, symptoms, payment_status)
 
-    # Include Room Number if doctor suggestion is found
-    if result.get("message") and "Room Number" in result.get("message"):
-        return jsonify(result)
-    else:
-        return jsonify(result)
+    # Extract and print Room Number if it exists
+    if result.get("message"):
+        room_number_match = re.search(r"Room Number: (\d+)", result["message"])
+        if room_number_match:
+            room_number = room_number_match.group(1)
+            print(f"Debug: Room Number identified - {room_number}")
+        else:
+            print("Debug: Room Number not found in the message.")
+
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(debug=True)
