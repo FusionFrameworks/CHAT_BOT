@@ -19,9 +19,6 @@ client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 dataset_path = 'D:/CHAT_BOT/doctor_suggestion_chatbot/dataset.csv'
 df = None
 
-
-print(f"Current working directory: {os.getcwd()}")
-
 def load_dataset():
     global df
     if df is None:
@@ -81,8 +78,8 @@ def suggest_doctor(df, user_symptoms, payment_status):
     if best_doctor and max_match_count >= 2:
         doctor_name, specialization, price, room_number = best_doctor
         doctor_message = [
-            "👨‍⚕ Based on your symptoms, we recommend you consult:",
-            f"🔍 **  For {specialization}: {doctor_name}",
+            "👨‍⚕️ Based on your symptoms, we recommend you consult:",
+            f"🔍 *  For {specialization}*: {doctor_name}",
             f"🏢 *Room Number*: {room_number}",
             "\nPlease feel free to consult them for the best care! 💖"
         ]
@@ -113,17 +110,7 @@ def handle_suggest_doctor():
     payment_status = data.get("payment_status", False)
 
     result = suggest_doctor(df, symptoms, payment_status)
-
-    # Extract and print Room Number if it exists
-    if result.get("message"):
-        room_number_match = re.search(r"Room Number: (\d+)", result["message"])
-        if room_number_match:
-            room_number = room_number_match.group(1)
-            print(f"Debug: Room Number identified - {room_number}")
-        else:
-            print("Debug: Room Number not found in the message.")
-
     return jsonify(result)
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     app.run(debug=True)
