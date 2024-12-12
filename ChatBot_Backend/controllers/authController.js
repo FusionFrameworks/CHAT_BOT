@@ -6,14 +6,14 @@ const Payment = require("../models/paymentModel");
 
 // Twilio configuration
 const client = new twilio(
-  "ACa58e5d71b82a166aa33bb9f1c37e9d22",
-  "d5449ef48c110c6c104ac59ae276d2fe"
+  "AC9d1139ae2a944f7479c5c223090bea41",
+  "24fa24a750f2ce88ef031bae5099d6a5"
 );
-const twilioServiceSid = "VAb528bad60ed0802b60e72fc7100efb34";
+const twilioServiceSid = "VAde186a6179f21610b2d8648c0c160ae6";
 
 // Helper function to select a Twilio number
 const selectTwilioNumber = () => {
-  const twilioNumbers = ["+919632983944", "+918804339456"];
+  const twilioNumbers = ["+919632983944", "+918804339456","+919481680079","+919743352610"];
   return twilioNumbers[Math.floor(Math.random() * twilioNumbers.length)];
 };
 

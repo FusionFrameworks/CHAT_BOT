@@ -8,9 +8,10 @@
 # app = Flask(__name__)
 # CORS(app)  # Enable CORS for cross-origin requests
 
-# TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC3a8f0101b4e0b8d8d640ef2f9e650857')
-# TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', '9d0c784d2e853da915ddc30b81dd91ff')
-# TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER', '+12317945891')
+# # Twilio configuration
+# TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC9d1139ae2a944f7479c5c223090bea41')
+# TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', '24fa24a750f2ce88ef031bae5099d6a5')
+# TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER', '+13204007751')
 # USER_PHONE_NUMBER = '+918804339456'
 
 # client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
@@ -59,7 +60,7 @@
 # def suggest_doctor(df, user_symptoms, payment_status):
 #     user_symptoms_list = clean_user_input(user_symptoms)
 #     if not user_symptoms_list:
-#         return {"message": "🤔 No symptoms provided. Please specify your symptoms clearly."}
+#         return {"message": "🤔 No symptoms provided. Please specify your symptoms clearly.", "room_number": None}
 
 #     best_doctor = None
 #     max_match_count = 0
@@ -78,20 +79,20 @@
 #     if best_doctor and max_match_count >= 2:
 #         doctor_name, specialization, price, room_number = best_doctor
 #         doctor_message = [
-#             "👨‍⚕️ Based on your symptoms, we recommend you consult:",
+#             "👨‍⚕ Based on your symptoms, we recommend you consult:",
 #             f"🔍 *  For {specialization}*: {doctor_name}",
-#             f"🏢 *Room Number*: {room_number}",
+#             f"🏢 Room Number: {room_number}",
 #             "\nPlease feel free to consult them for the best care! 💖"
 #         ]
 
 #         if not payment_status:
-#             return {"message": f"💳 Please make the payment of {price} to receive doctor suggestions."}
+#             return {"message": f"💳 Please make the payment of {price} to receive doctor suggestions.", "room_number": None}
 
 #         message_text = "\n".join(doctor_message)
 #         send_sms(message_text)
-#         return {"message": message_text}
+#         return {"message": message_text, "room_number": room_number}
 
-#     return {"message": f"🤔 No suitable doctors found for the symptoms: {', '.join(user_symptoms_list)}. Please provide more symptoms or check with a general physician."}
+#     return {"message": f"🤔 No suitable doctors found for the symptoms: {', '.join(user_symptoms_list)}. Please provide more symptoms or check with a general physician.", "room_number": None}
 
 # # Root route to indicate the API is running
 # @app.route('/')
@@ -112,7 +113,7 @@
 #     result = suggest_doctor(df, symptoms, payment_status)
 #     return jsonify(result)
 
-# if __name__ == "_main_":
+# if __name__ == "__main__":
 #     app.run(debug=True)
 
 
@@ -130,10 +131,10 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for cross-origin requests
 
 # Twilio configuration
-TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC3a8f0101b4e0b8d8d640ef2f9e650857')
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', '9d0c784d2e853da915ddc30b81dd91ff')
-TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER', '+12317945891')
-USER_PHONE_NUMBER = '+918804339456'
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', 'AC9d1139ae2a944f7479c5c223090bea41')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', '24fa24a750f2ce88ef031bae5099d6a5')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER', '+13204007751')
+USER_PHONE_NUMBERS = ['+918804339456','+919632983944','+919481680079','+919743352610']  # List of phone numbers
 
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
@@ -163,19 +164,20 @@ def clean_user_input(user_input):
     cleaned_input = re.sub(r"[^\w\s,]", "", cleaned_input)  # Remove punctuation
     return [symptom.strip() for symptom in re.split(r',\s*', cleaned_input) if symptom]
 
-# Function to send SMS with improved error handling
+# Function to send SMS to multiple phone numbers
 def send_sms(message):
-    try:
-        client.messages.create(
-            body=message,
-            from_=TWILIO_PHONE_NUMBER,
-            to=USER_PHONE_NUMBER
-        )
-        print("SMS sent successfully!")
-    except Exception as e:
-        print(f"Failed to send SMS: {str(e)}")
-        if "Authenticate" in str(e):
-            print("Check Twilio SID, Auth Token, and phone numbers.")
+    for phone_number in USER_PHONE_NUMBERS:
+        try:
+            client.messages.create(
+                body=message,
+                from_=TWILIO_PHONE_NUMBER,
+                to=phone_number
+            )
+            print(f"SMS sent successfully to {phone_number}!")
+        except Exception as e:
+            print(f"Failed to send SMS to {phone_number}: {str(e)}")
+            if "Authenticate" in str(e):
+                print("Check Twilio SID, Auth Token, and phone numbers.")
 
 # Suggest doctor based on the maximum matching symptoms
 def suggest_doctor(df, user_symptoms, payment_status):
@@ -236,3 +238,4 @@ def handle_suggest_doctor():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
