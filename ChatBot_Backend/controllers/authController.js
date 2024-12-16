@@ -6,10 +6,10 @@ const Payment = require("../models/paymentModel");
 
 // Twilio configuration
 const client = new twilio(
-  "ACcd15fc3bff46f3a7f67daf0468bda614",
-  "2fe10f5a680969a7254244ded540a2c7"
+  "ACb6a7a1c2a5d69b47101de4bc1c97be4f",
+  "53529920b47cdf445661f77bb64f7932"
 );
-const twilioServiceSid = "VAffbdd2c2cbac8cad93a36e09ad4b012d";
+const twilioServiceSid = "VA14d61a81cf7ff810cb2d39c5312e052d";
 
 // Helper function to select a Twilio number
 const selectTwilioNumber = () => {
