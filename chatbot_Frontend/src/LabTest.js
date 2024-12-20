@@ -153,7 +153,7 @@ const LabTests = () => {
         setPaymentSuccess(true); // Show the guidelines card after payment success
   
         // Call the Twilio Notification API
-        fetch("http://127.0.0.1:4000/send-notification", {
+        fetch("https://l7xqlqhl-4000.inc1.devtunnels.ms/send-notification", { // http://127.0.0.1:4000 for local host
           method: "POST",
           headers: {
             "Content-Type": "application/json",
