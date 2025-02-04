@@ -1,6 +1,6 @@
 Symptoms,Specialization,Doctor,Price,Room Number
-"High temperature, chills, sweating, headache",General Physician,Dr. Arjun Sharma,₹400,101
-"Fever, cough, sore throat, runny nose",General Physician,Dr. Priya Verma,₹400,102
+"High temperature, chills, sweFever, cough, sore throat, runny noseating, headache",General Physician,Dr. Arjun Sharma,₹400,101
+"",General Physician,Dr. Priya Verma,₹400,102
 "Sore throat, runny nose, coughing, sneezing",General Physician,Dr. Amit Gupta,₹400,103
 "Dull pain, pressure in the head, sensitivity to light",Neurologist,Dr. Suresh Rao,₹600,201
 "Abdominal pain, bloating, nausea, vomiting",Gastroenterologist,Dr. Nisha Patel,₹600,202
