@@ -3,17 +3,18 @@ const Notification = require("../models/notificationModel");
 const twilio = require("twilio");
 const { v4: uuidv4 } = require("uuid");
 const Payment = require("../models/paymentModel");
+require("dotenv").config();
 
 // Twilio configuration
 const client = new twilio(
-  "ACeb34f06570a4f319063db593e58792dc",
-  "fc03c2a684612033f10481b143e6aa57"
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
 );
-const twilioServiceSid = "VAacef877198ed83161485d79a1774469c";
+const twilioServiceSid = process.env.TWILIO_SERVICE_SID;
 
 // Helper function to select a Twilio number
 const selectTwilioNumber = () => {
-  const twilioNumbers = ["+919632983944", "+918804339456","+919481680079","+919743352610"];
+  const twilioNumbers = process.env.TWILIO_PHONE_NUMBERS.split(",");
   return twilioNumbers[Math.floor(Math.random() * twilioNumbers.length)];
 };
 

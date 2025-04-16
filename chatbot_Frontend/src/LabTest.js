@@ -137,7 +137,7 @@ const LabTests = () => {
   
     // Razorpay options for the payment
     const options = {
-      key: "rzp_test_lmkOFuIPmT2vi9", // Replace with your Razorpay key
+      key: process.env.REACT_APP_RAZORPAY_KEY, // Use environment variable
       amount: totalAmount * 100, // Amount in paise (₹1 = 100 paise)
       currency: "INR",
       name: "CareLink Labs",
@@ -340,6 +340,3 @@ const LabTests = () => {
 };
 
 export default LabTests;
-
-
-
